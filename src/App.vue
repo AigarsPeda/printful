@@ -9,10 +9,6 @@ const count = ref(0)
 const add = () => {
   count.value = increments(count.value)
 }
-
-// function increment() {
-//   count.value++
-// }
 </script>
 
 <template>
