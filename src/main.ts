@@ -3,11 +3,9 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import { store, key } from './store'
+import { store } from './store/store'
 
 const app = createApp(App)
 
-// pass the injection key
-app.use(store, key)
-
+app.use(store)
 app.mount('#app')
