@@ -8,59 +8,31 @@
       >
         Press Me
       </button>
-      <h5 class="text-3xl">Counter: {{ state.counter }}</h5>
+      <h5 class="text-3xl">Counter: {{ store.state.counter }}</h5>
       <h3>Double Counter:</h3>
       {{ doubleCounter }}
       <h3>Name:</h3>
-      {{ state.name }}
-      <input :value="state.name" @input="updateValue($event)" />
+      {{ store.state.name }}
+      <input :value="store.state.name" @input="updateValue($event)" />
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import { useStore, MutationTypes, ActionTypes } from '@/store/store'
 
-export default defineComponent({
-  setup() {
-    const store = useStore()
-    // const state = ref(store.state)
-    const inc = () => {
-      store.commit(MutationTypes.INC_COUNTER, 1)
-    }
+const store = useStore()
 
-    const actionInc = () => {
-      store.dispatch(ActionTypes.INC_COUNTER, 2)
-    }
+const actionInc = () => {
+  store.dispatch(ActionTypes.INC_COUNTER, 2)
+}
 
-    const updateName = (str: string | null) => {
-      if (!str) return
-      store.commit(MutationTypes.UPDATE_NAME, str)
-    }
-
-    const updateValue = (e: Event) => {
-      // if (!e.target) return
-      store.commit(MutationTypes.UPDATE_NAME, (e.target as HTMLInputElement).value)
-    }
-
-    const doubleCounter = computed(() => store.getters.doubleCounter)
-
-    return {
-      inc,
-      actionInc,
-      updateName,
-      updateValue,
-      doubleCounter,
-      state: store.state
-    }
-  },
-  name: 'App',
-  props: {
-    msg: String
-  },
-  methods: {}
-})
+const doubleCounter = computed(() => store.getters.doubleCounter)
+const updateValue = (e: Event) => {
+  // if (!e.target) return
+  store.commit(MutationTypes.UPDATE_NAME, (e.target as HTMLInputElement).value)
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
