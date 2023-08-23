@@ -1,3 +1,5 @@
+// node_modules/vuex/types/index
+
 declare module 'vuex' {
   export * from 'vuex/types/index.d.ts'
   export * from 'vuex/types/helpers.d.ts'

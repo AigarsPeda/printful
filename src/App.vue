@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import increments from './components/utils/increments'
+import { useStore } from './store'
+
+const store = useStore()
 
 const count = ref(0)
 
@@ -18,6 +21,7 @@ const add = () => {
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       <button @click="add">count is: {{ count }}</button>
+      <button @click="store.commit('increment')">count is: {{ store.state.count }}</button>
     </div>
   </header>
 
