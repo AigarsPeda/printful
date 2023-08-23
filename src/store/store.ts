@@ -10,15 +10,46 @@ import {
   createLogger
 } from 'vuex'
 
+export type RectType = {
+  id: string
+  top: number
+  fill: string
+  left: number
+  width: number
+  height: number
+}
+
 //declare state
-export type State = { counter: number; name: string }
+export type State = { counter: number; name: string; canvasObject: RectType[] }
 
 //set state
-const state: State = { counter: 0, name: 'John Doe' }
+const state: State = {
+  counter: 0,
+  name: 'John Doe',
+  canvasObject: [
+    {
+      width: 50,
+      height: 50,
+      fill: 'blue',
+      left: 0,
+      top: 0,
+      id: '1'
+    },
+    {
+      width: 50,
+      height: 50,
+      fill: 'red',
+      left: 60,
+      top: 60,
+      id: '2'
+    }
+  ]
+}
 
 // mutations and action enums
 
 export enum MutationTypes {
+  ADD_RECT = 'ADD_RECT',
   INC_COUNTER = 'SET_COUNTER',
   UPDATE_NAME = 'UPDATE_NAME'
 }
@@ -31,6 +62,7 @@ export enum ActionTypes {
 export type Mutations<S = State> = {
   [MutationTypes.INC_COUNTER](state: S, payload: number): void
   [MutationTypes.UPDATE_NAME](state: S, payload: string): void
+  [MutationTypes.ADD_RECT](state: S, payload: RectType): void
 }
 
 //define mutations
@@ -40,6 +72,9 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.UPDATE_NAME](state: State, payload: string) {
     state.name = payload
+  },
+  [MutationTypes.ADD_RECT](state: State, payload: RectType) {
+    state.canvasObject.push(payload)
   }
 }
 
@@ -67,6 +102,7 @@ export const actions: ActionTree<State, State> & Actions = {
 // Getters types
 export type Getters = {
   doubleCounter(state: State): number
+  getLengthCanvasObject(state: State): number
 }
 
 //getters
@@ -75,6 +111,9 @@ export const getters: GetterTree<State, State> & Getters = {
   doubleCounter: (state) => {
     console.log('state', state.counter)
     return state.counter * 2
+  },
+  getLengthCanvasObject: (state) => {
+    return state.canvasObject.length
   }
 }
 
