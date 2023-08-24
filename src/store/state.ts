@@ -1,3 +1,5 @@
+import { fabric } from 'fabric'
+
 export type RectType = {
   id: string
   top: number
@@ -10,6 +12,18 @@ export type RectType = {
 //declare state
 export type State = {
   counter: number
+  mainCanvasDimensions: {
+    width: number
+    height: number
+  }
+  canvas: {
+    canva: fabric.Canvas | null
+    id: string | null
+  }[]
+  boundingBoxes: {
+    boundingBox: fabric.Rect | null
+    id: string | null
+  }[]
   canvasObject: {
     back: RectType[]
     front: RectType[]
@@ -31,6 +45,12 @@ const PINK = {
 //set state
 export const state: State = {
   counter: 0,
+  canvas: [],
+  mainCanvasDimensions: {
+    width: 500,
+    height: 700
+  },
+  boundingBoxes: [],
   canvasObject: {
     front: [
       {

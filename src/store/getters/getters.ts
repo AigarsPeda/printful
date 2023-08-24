@@ -8,6 +8,9 @@ const getters: GetterTree<State, State> & GettersType = {
   },
   getLengthCanvasObject: (state) => {
     return state.canvasObject.front.length
+  },
+  getMainCanvasDimensions: (state) => {
+    return state.mainCanvasDimensions
   }
 }
 

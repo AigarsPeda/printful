@@ -22,6 +22,21 @@ const mutations: MutationTree<State> & MutationsType = {
     state.canvasObject.back = updateCanvasObjectArray(state.canvasObject.back, payload, 2)
     state.canvasObject.sideL = updateCanvasObjectArray(state.canvasObject.sideL, payload, 4)
     state.canvasObject.sideR = updateCanvasObjectArray(state.canvasObject.sideR, payload, 4)
+  },
+  [MutationEnum.SAVE_CANVAS](state: State, payload: { canvas: fabric.Canvas; id: string }) {
+    state.canvas.push({
+      canva: payload.canvas,
+      id: payload.id
+    })
+  },
+  [MutationEnum.SAVE_BOUNDING_BOX](
+    state: State,
+    payload: { boundingBox: fabric.Rect; id: string }
+  ) {
+    state.boundingBoxes.push({
+      boundingBox: payload.boundingBox,
+      id: payload.id
+    })
   }
 }
 

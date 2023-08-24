@@ -6,8 +6,6 @@
           <DesignSettingCard
             :key="index"
             :item="item"
-            :boundingBox="state.boundingBox"
-            :handlePotionUpdate="handlePotionUpdate"
             :position="{ left: item.left, top: item.top }"
           />
         </li>
@@ -18,11 +16,15 @@
     </div>
     <div class="fabric-canvas-container">
       <div>
-        <FabricCanvas
-          @mouse:dblclick="handleClick"
-          @canvas-created="handleCreated"
+        <SideDesignCanvas
+          isBoundingBox
+          isContentEditable
           bgImage="../assets/images/front.jpg"
-          :dimensions="state.canvasDimensions"
+          :rects="store.state.canvasObject.front"
+          :canvasDimensions="{
+            width: canvasDimensions.width,
+            height: canvasDimensions.height
+          }"
         />
       </div>
       <div class="fabric-canvas-side-container">
@@ -30,8 +32,8 @@
           bgImage="../assets/images/back.jpg"
           :rects="store.state.canvasObject.back"
           :canvasDimensions="{
-            width: state.canvasDimensions.width / 2,
-            height: state.canvasDimensions.height / 2
+            width: canvasDimensions.width / 2,
+            height: canvasDimensions.height / 2
           }"
         />
         <div class="fabric-canvas-side-container_side">
@@ -39,16 +41,16 @@
             bgImage="../assets/images/side.jpg"
             :rects="store.state.canvasObject.sideR"
             :canvasDimensions="{
-              width: state.canvasDimensions.width / 4,
-              height: state.canvasDimensions.height / 4
+              width: canvasDimensions.width / 4,
+              height: canvasDimensions.height / 4
             }"
           />
           <SideDesignCanvas
             bgImage="../assets/images/side-l.jpg"
             :rects="store.state.canvasObject.sideL"
             :canvasDimensions="{
-              width: state.canvasDimensions.width / 4,
-              height: state.canvasDimensions.height / 4
+              width: canvasDimensions.width / 4,
+              height: canvasDimensions.height / 4
             }"
           />
         </div>
@@ -60,112 +62,37 @@
 <script setup lang="ts">
 import Button from '@/components/Button.vue'
 import DesignSettingCard from '@/components/DesignSettingCard.vue'
-import FabricCanvas from '@/components/FabricCanvas.vue'
+import SideDesignCanvas from '@/components/SideDesignCanvas.vue'
 import { COLORS } from '@/hardcoded'
 import { MutationEnum } from '@/store/mutation/mutation.types'
 import { useStore } from '@/store/store'
-import { type CustomRectI } from '@/types/fabric.types'
-import addBoundingBoxToCanvas from '@/utils/addBoundingBoxToCanvas'
-import checkBoundingBox from '@/utils/checkBoundingBox'
-import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import loadSateToCanvas from '@/utils/loadSateToCanvas'
-import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
-import { fabric } from 'fabric'
-import { computed, ref, watch } from 'vue'
-import SideDesignCanvas from '@/components/SideDesignCanvas.vue'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
-
-type StateType = {
-  canvasDimensions: {
-    width: number
-    height: number
-  }
-  canvas: fabric.Canvas | null
-  boundingBox: fabric.Rect | null
-}
+import { computed, watch } from 'vue'
 
 const store = useStore()
-
-const state = ref<StateType>({
-  canvasDimensions: {
-    width: 500,
-    height: 700
-  },
-  canvas: null,
-  boundingBox: null
-})
-
+const canvasDimensions = computed(() => store.getters.getMainCanvasDimensions)
 const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
-
-const handleCreated = (fabricCanvas: fabric.Canvas) => {
-  state.value.canvas = fabricCanvas
-
-  const imgUrl = (str: string) => {
-    return new URL(str, import.meta.url)
-  }
-
-  loadBgImageToCanvas(imgUrl(`../assets/images/front.jpg`), state.value.canvas)
-  loadSateToCanvas(state.value.canvas, store.state.canvasObject.front)
-  const boundingBox = addBoundingBoxToCanvas(state.value.canvas, true, {
-    width: state.value.canvasDimensions.width / 2,
-    height: state.value.canvasDimensions.height / 2
-  })
-
-  state.value.boundingBox = boundingBox
-
-  checkBoundingBox(state.value.canvas, {
-    top: boundingBox.top,
-    left: boundingBox.left,
-    width: state.value.canvasDimensions.width / 2,
-    height: state.value.canvasDimensions.height / 2
-  })
-
-  updateCanvasObjPositionAfterDrag(state.value.canvas)
-}
-
-const handlePotionUpdate = (obj: { id: string; top: number; left: number }) => {
-  const objCanvas = state.value.canvas?.getObjects()
-
-  if (!objCanvas) return
-
-  const customObj = objCanvas as CustomRectI[]
-  const objCanvasFilter = customObj.find((o) => o.id === obj.id)
-
-  if (!objCanvasFilter) return
-
-  objCanvasFilter.set({
-    top: obj.top,
-    left: obj.left
-  })
-
-  store.commit(MutationEnum.UPDATE_RECT_POSITION, {
-    id: obj.id,
-    top: obj.top || 0,
-    left: obj.left || 0
-  })
-
-  state.value.canvas?.renderAll()
-}
+const canva = computed(() => store.state.canvas.find((c) => c.id === 'front') || null)
 
 const handleClick = () => {
-  if (!state.value.canvas) return
+  if (!canva.value?.canva) return
 
   store.commit(MutationEnum.ADD_RECT, {
     top: 230,
     left: 120,
     width: 50,
     height: 50,
-    fill: COLORS[Math.floor(Math.random() * COLORS.length)],
-    id: (lengthCanvasObject.value + 1).toString()
+    id: (lengthCanvasObject.value + 1).toString(),
+    fill: COLORS[Math.floor(Math.random() * COLORS.length)]
   })
 }
 
-// if canvasContent is updated add the new object to the canvas
 watch(store.state.canvasObject, () => {
-  if (!state.value.canvas) return
+  if (!canva.value?.canva) return
 
-  removeObjWithoutIdFromCanvas(state.value.canvas)
-  loadSateToCanvas(state.value.canvas, store.state.canvasObject.front)
+  removeObjWithoutIdFromCanvas(canva.value?.canva)
+  loadSateToCanvas(canva.value?.canva, store.state.canvasObject.front)
 })
 </script>
 

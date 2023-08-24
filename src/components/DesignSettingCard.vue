@@ -1,18 +1,3 @@
-<script setup lang="ts">
-import type { RectType } from '@/store/state'
-
-defineProps<{
-  item: RectType
-  boundingBox: fabric.Rect | null
-  position: { left: number; top: number }
-  handlePotionUpdate: (obj: { id: string; top: number; left: number }) => void
-}>()
-
-const handleRange = (event: Event) => {
-  return parseInt((event.target as HTMLInputElement).value)
-}
-</script>
-
 <template>
   <div class="design-setting-card-container">
     <div class="design-setting-card_color" />
@@ -21,9 +6,9 @@ const handleRange = (event: Event) => {
         <label> Left: {{ position.left }} </label>
         <input
           type="range"
+          :value="position.left"
           :min="boundingBox?.left || 0"
           :max="(boundingBox?.left || 0) + (boundingBox?.width || 0) - item.width"
-          :value="position.left"
           @input="
             handlePotionUpdate({
               id: item.id,
@@ -37,9 +22,9 @@ const handleRange = (event: Event) => {
         <label> Top: {{ position.top }} </label>
         <input
           type="range"
+          :value="position.top"
           :min="boundingBox?.top || 0"
           :max="(boundingBox?.top || 0) + (boundingBox?.height || 0) - item.height"
-          :value="position.top"
           @input="
             handlePotionUpdate({
               id: item.id,
@@ -52,6 +37,52 @@ const handleRange = (event: Event) => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { MutationEnum } from '@/store/mutation/mutation.types'
+import { type RectType } from '@/store/state'
+import { store } from '@/store/store'
+import type { CustomRectI } from '@/types/fabric.types'
+import { computed } from 'vue'
+
+defineProps<{
+  item: RectType
+  position: { left: number; top: number }
+}>()
+
+const boundingBox = computed(
+  () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
+)
+
+const handlePotionUpdate = (obj: { id: string; top: number; left: number }) => {
+  const canva = store.state.canvas.find((c) => c.id === 'front')
+  const objCanvas = canva?.canva?.getObjects()
+
+  if (!objCanvas) return
+
+  const customObj = objCanvas as CustomRectI[]
+  const objCanvasFilter = customObj.find((o) => o.id === obj.id)
+
+  if (!objCanvasFilter) return
+
+  objCanvasFilter.set({
+    top: obj.top,
+    left: obj.left
+  })
+
+  store.commit(MutationEnum.UPDATE_RECT_POSITION, {
+    id: obj.id,
+    top: obj.top || 0,
+    left: obj.left || 0
+  })
+
+  canva?.canva?.renderAll()
+}
+
+const handleRange = (event: Event) => {
+  return parseInt((event.target as HTMLInputElement).value)
+}
+</script>
 
 <style scoped>
 .design-setting-card-container {
