@@ -8,7 +8,11 @@ type BoundingOptionsType = {
   stroke?: string
 }
 
-const addBoundingBoxToCanvas = (canvas: fabric.Canvas, options?: BoundingOptionsType) => {
+const addBoundingBoxToCanvas = (
+  canvas: fabric.Canvas,
+  isCenter = false,
+  options?: BoundingOptionsType
+) => {
   const boundingBox = new fabric.Rect({
     fill: 'none',
     evented: false,
@@ -23,6 +27,14 @@ const addBoundingBoxToCanvas = (canvas: fabric.Canvas, options?: BoundingOptions
     backgroundColor: 'transparent',
     stroke: options?.stroke || 'red'
   })
+
+  // position bounding in the center of the canvas
+  if (isCenter && canvas && boundingBox.height && boundingBox.width) {
+    boundingBox.set({
+      top: canvas.getHeight() / 2 - boundingBox.height / 2,
+      left: canvas.getWidth() / 2 - boundingBox.width / 2
+    })
+  }
 
   canvas.add(boundingBox)
 

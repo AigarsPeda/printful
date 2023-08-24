@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const props = defineProps<{
-  // mouseDblclick: () => void
-  // canvasCreated: (canvas: fabric.Canvas) => void
+defineProps<{
+  hight: number
+  width: number
   bgImage: string
 }>()
 
@@ -22,7 +22,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasReference" id="canvas" width="350" height="500" />
+  <canvas ref="canvasReference" id="canvas" :width="width" :height="hight" />
 </template>
 
 <style scoped>

@@ -3,8 +3,10 @@
     <div>
       <AppHeader :msg="`T shirt designer ${lengthCanvasObject}`" />
       <FabricCanvas
-        @canvas-created="handleCreated"
         @mouse:dblclick="handleClick"
+        @canvas-created="handleCreated"
+        :width="canvasDimensions.width"
+        :hight="canvasDimensions.height"
         bgImage="@/assets/images/front.jpg"
       />
       <div class="btn-container">
@@ -23,12 +25,13 @@ import { useStore } from '@/store/store'
 import { type CustomRectI } from '@/types/fabric.types'
 import addBoundingBoxToCanvas from '@/utils/addBoundingBoxToCanvas'
 import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
+import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
-import loadSateToCanvas from './utils/loadSateToCanvas'
 
 const store = useStore()
 const canvas = ref<fabric.Canvas>()
+const canvasDimensions = ref({ width: 350, height: 500 })
 
 const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
 
@@ -41,7 +44,10 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
 
   loadBgImageToCanvas(imgUrl(`./assets/images/front.jpg`), canvas.value)
   loadSateToCanvas(canvas.value, store.state.canvasObject)
-  addBoundingBoxToCanvas(canvas.value)
+  addBoundingBoxToCanvas(canvas.value, true, {
+    width: canvasDimensions.value.width / 2,
+    height: canvasDimensions.value.height / 2
+  })
 }
 
 const handleClick = () => {
