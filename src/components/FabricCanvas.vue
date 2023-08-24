@@ -1,8 +1,9 @@
 <script setup lang="ts">
-// defineProps<{
-//   mouseDblclick: () => void
-//   canvasCreated: (canvas: fabric.Canvas) => void
-// }>()
+const props = defineProps<{
+  // mouseDblclick: () => void
+  // canvasCreated: (canvas: fabric.Canvas) => void
+  bgImage: string
+}>()
 
 import { fabric } from 'fabric'
 import { ref, onMounted } from 'vue'
@@ -21,13 +22,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasReference" id="canvas" width="500" height="500" />
+  <canvas ref="canvasReference" id="canvas" width="350" height="500" />
 </template>
 
 <style scoped>
 canvas {
-  /* width: 100%;
-  height: 100%; */
   background-color: aliceblue;
 }
 </style>

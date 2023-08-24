@@ -18,17 +18,17 @@ export const state: State = {
     {
       width: 50,
       height: 50,
-      fill: 'blue',
-      left: 0,
-      top: 0,
+      fill: '#7c3aed',
+      left: 135,
+      top: 170,
       id: '1'
     },
     {
       width: 50,
       height: 50,
-      fill: 'red',
-      left: 60,
-      top: 60,
+      fill: '#db2777',
+      left: 160,
+      top: 200,
       id: '2'
     }
   ]

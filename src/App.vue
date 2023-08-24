@@ -2,8 +2,14 @@
   <div>
     <div>
       <AppHeader :msg="`T shirt designer ${lengthCanvasObject}`" />
-      <FabricCanvas @canvas-created="handleCreated" @mouse:dblclick="handleClick" />
-      <Button title="Add design" @click="handleClick" />
+      <FabricCanvas
+        @canvas-created="handleCreated"
+        @mouse:dblclick="handleClick"
+        bgImage="@/assets/images/front.jpg"
+      />
+      <div class="btn-container">
+        <Button title="Add design" @click="handleClick" />
+      </div>
     </div>
   </div>
 </template>
@@ -15,8 +21,11 @@ import FabricCanvas from '@/components/FabricCanvas.vue'
 import { MutationEnum } from '@/store/mutation/mutation.types'
 import { useStore } from '@/store/store'
 import { type CustomRectI } from '@/types/fabric.types'
+import addBoundingBoxToCanvas from '@/utils/addBoundingBoxToCanvas'
+import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
+import loadSateToCanvas from './utils/loadSateToCanvas'
 
 const store = useStore()
 const canvas = ref<fabric.Canvas>()
@@ -26,22 +35,24 @@ const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
 const handleCreated = (fabricCanvas: fabric.Canvas) => {
   canvas.value = fabricCanvas
 
-  store.state.canvasObject.forEach((rect) => {
-    const r = new fabric.Rect(rect) as CustomRectI
-    r.set('id', rect.id)
-    canvas.value?.add(r)
-  })
+  const imgUrl = (str: string) => {
+    return new URL(str, import.meta.url)
+  }
+
+  loadBgImageToCanvas(imgUrl(`./assets/images/front.jpg`), canvas.value)
+  loadSateToCanvas(canvas.value, store.state.canvasObject)
+  addBoundingBoxToCanvas(canvas.value)
 }
 
 const handleClick = () => {
   if (!canvas.value) return
 
   store.commit(MutationEnum.ADD_RECT, {
-    top: 0,
-    left: 0,
+    top: 230,
+    left: 120,
     width: 50,
     height: 50,
-    fill: 'green',
+    fill: '#059669',
     id: (lengthCanvasObject.value + 1).toString()
   })
 }
@@ -61,4 +72,8 @@ watch(store.state.canvasObject, () => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn-container {
+  margin-top: 20px;
+}
+</style>
