@@ -1,51 +1,27 @@
 import { MutationEnum, type MutationsType } from '@/store/mutation/mutation.types'
+import addCanvasObjectArray from '@/store/mutation/utils/addCanvasObjectArray'
+import updateCanvasObjectArray from '@/store/mutation/utils/updateCanvasObjectArray'
 import type { RectType, State } from '@/store/state'
-import { h } from 'vue'
 import type { MutationTree } from 'vuex'
 
 const mutations: MutationTree<State> & MutationsType = {
   [MutationEnum.INC_COUNTER](state: State, payload: number) {
     state.counter += payload
   },
-  [MutationEnum.UPDATE_NAME](state: State, payload: string) {
-    state.name = payload
-  },
   [MutationEnum.ADD_RECT](state: State, payload: RectType) {
-    state.canvasObject.front.push(payload)
-
-    state.canvasObject.back.push({
-      ...payload,
-      top: payload.top / 2,
-      left: payload.left / 2,
-      height: payload.height / 2,
-      width: payload.width / 2
-    })
+    addCanvasObjectArray(state.canvasObject.front, payload)
+    addCanvasObjectArray(state.canvasObject.back, payload, 2)
+    addCanvasObjectArray(state.canvasObject.sideL, payload, 4)
+    addCanvasObjectArray(state.canvasObject.sideR, payload, 4)
   },
   [MutationEnum.UPDATE_RECT_POSITION](
     state: State,
     payload: { id: string; top: number; left: number }
   ) {
-    state.canvasObject.front = state.canvasObject.front.map((rect) => {
-      if (rect.id === payload.id) {
-        return {
-          ...rect,
-          top: payload.top,
-          left: payload.left
-        }
-      }
-      return rect
-    })
-
-    state.canvasObject.back = state.canvasObject.back.map((rect) => {
-      if (rect.id === payload.id) {
-        return {
-          ...rect,
-          top: payload.top / 2,
-          left: payload.left / 2
-        }
-      }
-      return rect
-    })
+    state.canvasObject.front = updateCanvasObjectArray(state.canvasObject.front, payload)
+    state.canvasObject.back = updateCanvasObjectArray(state.canvasObject.back, payload, 2)
+    state.canvasObject.sideL = updateCanvasObjectArray(state.canvasObject.sideL, payload, 4)
+    state.canvasObject.sideR = updateCanvasObjectArray(state.canvasObject.sideR, payload, 4)
   }
 }
 

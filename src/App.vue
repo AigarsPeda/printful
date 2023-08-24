@@ -1,20 +1,15 @@
 <template>
   <div>
     <div>
-      <AppHeader :msg="`T shirt designer ${lengthCanvasObject}`" />
-      <FrontDesignCanvas />
+      <AppHeader :msg="`T shirt designer`" />
+      <Design />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import AppHeader from '@/components/AppHeader.vue'
-import { useStore } from '@/store/store'
-import { computed } from 'vue'
-import FrontDesignCanvas from '@/components/FrontDesignCanvas.vue'
-
-const store = useStore()
-const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
+import Design from '@/components/Design.vue'
 </script>
 
 <style scoped></style>

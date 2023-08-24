@@ -29,12 +29,16 @@ type StateType = {
 const props = defineProps<{
   bgImage: string
   rects: RectType[]
+  canvasDimensions: {
+    width: number
+    height: number
+  }
 }>()
 
 const state = ref<StateType>({
   canvasDimensions: {
-    width: 175,
-    height: 250
+    width: props.canvasDimensions.width,
+    height: props.canvasDimensions.height
   },
   canvas: null,
   boundingBox: null

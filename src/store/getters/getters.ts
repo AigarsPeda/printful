@@ -7,7 +7,7 @@ const getters: GetterTree<State, State> & GettersType = {
     return state.counter * 2
   },
   getLengthCanvasObject: (state) => {
-    return state.canvasObject.length
+    return state.canvasObject.front.length
   }
 }
 

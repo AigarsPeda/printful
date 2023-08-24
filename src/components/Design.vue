@@ -12,24 +12,46 @@
           />
         </li>
       </ul>
+      <div class="btn-container">
+        <Button color="purple" title="Add design" @click="handleClick" />
+      </div>
     </div>
     <div class="fabric-canvas-container">
       <div>
         <FabricCanvas
           @mouse:dblclick="handleClick"
           @canvas-created="handleCreated"
-          bgImage="@/assets/images/front.jpg"
+          bgImage="../assets/images/front.jpg"
           :dimensions="state.canvasDimensions"
         />
-        <div class="btn-container">
-          <Button color="purple" title="Add design" @click="handleClick" />
-        </div>
       </div>
       <div class="fabric-canvas-side-container">
         <SideDesignCanvas
           bgImage="../assets/images/back.jpg"
           :rects="store.state.canvasObject.back"
+          :canvasDimensions="{
+            width: state.canvasDimensions.width / 2,
+            height: state.canvasDimensions.height / 2
+          }"
         />
+        <div class="fabric-canvas-side-container_side">
+          <SideDesignCanvas
+            bgImage="../assets/images/side.jpg"
+            :rects="store.state.canvasObject.sideR"
+            :canvasDimensions="{
+              width: state.canvasDimensions.width / 4,
+              height: state.canvasDimensions.height / 4
+            }"
+          />
+          <SideDesignCanvas
+            bgImage="../assets/images/side-l.jpg"
+            :rects="store.state.canvasObject.sideL"
+            :canvasDimensions="{
+              width: state.canvasDimensions.width / 4,
+              height: state.canvasDimensions.height / 4
+            }"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -66,8 +88,8 @@ const store = useStore()
 
 const state = ref<StateType>({
   canvasDimensions: {
-    width: 350,
-    height: 500
+    width: 500,
+    height: 700
   },
   canvas: null,
   boundingBox: null
@@ -182,9 +204,14 @@ watch(store.state.canvasObject, () => {
 
 .fabric-canvas-side-container {
   display: flex;
+  height: 100%;
   margin-left: 20px;
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.fabric-canvas-side-container_side {
+  display: flex;
 }
 </style>
