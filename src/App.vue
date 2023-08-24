@@ -9,7 +9,7 @@
               <DesignSettingCard
                 :key="index"
                 :item="item"
-                :boundingBox="boundingBoxRef"
+                :boundingBox="state.boundingBox"
                 :handlePotionUpdate="handlePotionUpdate"
                 :position="{ left: item.left, top: item.top }"
               />
@@ -18,10 +18,10 @@
         </div>
         <div>
           <FabricCanvas
-            :dimensions="canvasDimensions"
             @mouse:dblclick="handleClick"
             @canvas-created="handleCreated"
             bgImage="@/assets/images/front.jpg"
+            :dimensions="state.canvasDimensions"
           />
           <div class="btn-container">
             <Button color="purple" title="Add design" @click="handleClick" />
@@ -48,41 +48,56 @@ import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
 import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
 
+type StateType = {
+  canvasDimensions: {
+    width: number
+    height: number
+  }
+  canvas: fabric.Canvas | null
+  boundingBox: fabric.Rect | null
+}
+
 const store = useStore()
-const canvas = ref<fabric.Canvas>()
-const boundingBoxRef = ref<fabric.Rect>()
-const canvasDimensions = ref({ width: 350, height: 500 })
+
+const state = ref<StateType>({
+  canvasDimensions: {
+    width: 350,
+    height: 500
+  },
+  canvas: null,
+  boundingBox: null
+})
 
 const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
 
 const handleCreated = (fabricCanvas: fabric.Canvas) => {
-  canvas.value = fabricCanvas
+  state.value.canvas = fabricCanvas
 
   const imgUrl = (str: string) => {
     return new URL(str, import.meta.url)
   }
 
-  loadBgImageToCanvas(imgUrl(`./assets/images/front.jpg`), canvas.value)
-  loadSateToCanvas(canvas.value, store.state.canvasObject)
-  const boundingBox = addBoundingBoxToCanvas(canvas.value, true, {
-    width: canvasDimensions.value.width / 2,
-    height: canvasDimensions.value.height / 2
+  loadBgImageToCanvas(imgUrl(`./assets/images/front.jpg`), state.value.canvas)
+  loadSateToCanvas(state.value.canvas, store.state.canvasObject)
+  const boundingBox = addBoundingBoxToCanvas(state.value.canvas, true, {
+    width: state.value.canvasDimensions.width / 2,
+    height: state.value.canvasDimensions.height / 2
   })
 
-  boundingBoxRef.value = boundingBox
+  state.value.boundingBox = boundingBox
 
-  checkBoundingBox(canvas.value, {
+  checkBoundingBox(state.value.canvas, {
     top: boundingBox.top,
     left: boundingBox.left,
-    width: canvasDimensions.value.width / 2,
-    height: canvasDimensions.value.height / 2
+    width: state.value.canvasDimensions.width / 2,
+    height: state.value.canvasDimensions.height / 2
   })
 
-  updateCanvasObjPositionAfterDrag(canvas.value)
+  updateCanvasObjPositionAfterDrag(state.value.canvas)
 }
 
 const handlePotionUpdate = (obj: { id: string; top: number; left: number }) => {
-  const objCanvas = canvas.value?.getObjects()
+  const objCanvas = state.value.canvas?.getObjects()
 
   if (!objCanvas) return
 
@@ -102,11 +117,11 @@ const handlePotionUpdate = (obj: { id: string; top: number; left: number }) => {
     left: obj.left || 0
   })
 
-  canvas.value?.renderAll()
+  state.value.canvas?.renderAll()
 }
 
 const handleClick = () => {
-  if (!canvas.value) return
+  if (!state.value.canvas) return
 
   store.commit(MutationEnum.ADD_RECT, {
     top: 230,
@@ -120,13 +135,13 @@ const handleClick = () => {
 
 // if canvasContent is updated add the new object to the canvas
 watch(store.state.canvasObject, () => {
-  if (!canvas.value) return
+  if (!state.value.canvas) return
 
-  const obj = canvas.value.getObjects() as CustomRectI[]
+  const obj = state.value.canvas.getObjects() as CustomRectI[]
   const ids = obj?.map((o) => o.id)
   const filterNewVal = store.state.canvasObject.filter((o) => !ids?.includes(o.id))
 
-  loadSateToCanvas(canvas.value, filterNewVal)
+  loadSateToCanvas(state.value.canvas, filterNewVal)
 })
 </script>
 

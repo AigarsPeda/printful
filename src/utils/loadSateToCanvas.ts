@@ -8,6 +8,7 @@ const loadSateToCanvas = (canvas: fabric.Canvas, canvasObject: RectType[]) => {
     r.set('id', rect.id)
 
     canvas.add(r)
+    canvas.renderAll()
   })
 }
 

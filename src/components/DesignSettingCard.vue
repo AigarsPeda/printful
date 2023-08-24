@@ -3,8 +3,8 @@ import type { RectType } from '@/store/state'
 
 defineProps<{
   item: RectType
+  boundingBox: fabric.Rect | null
   position: { left: number; top: number }
-  boundingBox: fabric.Rect | undefined
   handlePotionUpdate: (obj: { id: string; top: number; left: number }) => void
 }>()
 
