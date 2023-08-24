@@ -4,7 +4,7 @@ import getters from '@/store/getters/getters'
 import type { GettersType } from '@/store/getters/getters.types'
 import { type MutationsType } from '@/store/mutation/mutation.types'
 import mutations from '@/store/mutation/mutations'
-import { state, type State } from '@/store/state'
+import { state, type StateType } from '@/store/state'
 import {
   createLogger,
   createStore,
@@ -14,7 +14,7 @@ import {
 } from 'vuex'
 
 //setup store type
-export type Store = Omit<VuexStore<State>, 'commit' | 'getters' | 'dispatch'> & {
+export type StoreType = Omit<VuexStore<StateType>, 'commit' | 'getters' | 'dispatch'> & {
   commit<K extends keyof MutationsType, P extends Parameters<MutationsType[K]>[1]>(
     key: K,
     payload: P,
@@ -41,5 +41,5 @@ export const store = createStore({
 })
 
 export function useStore() {
-  return store as Store
+  return store as StoreType
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container">
-    <div class="app-container_btn">
+  <div class="design-container">
+    <div class="design-button-list-container">
       <ul>
         <li v-for="(item, index) in store.state.canvasObject.front">
           <DesignSettingCard
@@ -10,11 +10,11 @@
           />
         </li>
       </ul>
-      <div class="btn-container">
+      <div class="design-option-button-container">
         <Button color="purple" title="Add design" @click="handleClick" />
       </div>
     </div>
-    <div class="fabric-canvas-container">
+    <div class="design-canvas-container">
       <div>
         <SideDesignCanvas
           isBoundingBox
@@ -27,7 +27,7 @@
           }"
         />
       </div>
-      <div class="fabric-canvas-side-container">
+      <div class="design-canvas-side-container">
         <SideDesignCanvas
           bgImage="../assets/images/back.jpg"
           :rects="store.state.canvasObject.back"
@@ -36,7 +36,7 @@
             height: canvasDimensions.height / 2
           }"
         />
-        <div class="fabric-canvas-side-container_side">
+        <div class="design-canvas-side-container_side">
           <SideDesignCanvas
             bgImage="../assets/images/side.jpg"
             :rects="store.state.canvasObject.sideR"
@@ -97,12 +97,11 @@ watch(store.state.canvasObject, () => {
 </script>
 
 <style scoped>
-.app-container {
+.design-container {
   display: flex;
-  padding: 20px;
 }
 
-.app-container_btn {
+.design-button-list-container {
   display: flex;
   cursor: pointer;
   border-radius: 5px;
@@ -112,24 +111,24 @@ watch(store.state.canvasObject, () => {
   background-color: #f9fafb;
 }
 
-.app-container_btn ul {
+.design-button-list-container ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.app-container_btn li {
+.design-button-list-container li {
   margin-bottom: 10px;
 }
 
-.fabric-canvas-container {
+.design-canvas-container {
   display: flex;
   margin-left: 20px;
   align-items: center;
   justify-content: space-between;
 }
 
-.fabric-canvas-side-container {
+.design-canvas-side-container {
   display: flex;
   height: 100%;
   margin-left: 20px;
@@ -138,7 +137,7 @@ watch(store.state.canvasObject, () => {
   justify-content: space-between;
 }
 
-.fabric-canvas-side-container_side {
+.design-canvas-side-container_side {
   display: flex;
 }
 </style>

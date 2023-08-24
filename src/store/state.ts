@@ -10,8 +10,7 @@ export type RectType = {
 }
 
 //declare state
-export type State = {
-  counter: number
+export type StateType = {
   mainCanvasDimensions: {
     width: number
     height: number
@@ -43,8 +42,7 @@ const PINK = {
 }
 
 //set state
-export const state: State = {
-  counter: 0,
+export const state: StateType = {
   canvas: [],
   mainCanvasDimensions: {
     width: 500,

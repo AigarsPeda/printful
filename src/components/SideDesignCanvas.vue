@@ -29,7 +29,6 @@ type StateType = {
   }
 
   canvas: fabric.Canvas | null
-  // boundingBox: fabric.Rect | null
 }
 
 const props = defineProps<{
@@ -49,7 +48,6 @@ const state = ref<StateType>({
     height: props.canvasDimensions.height
   },
   canvas: null
-  // boundingBox: null
 })
 
 const handleCreated = (fabricCanvas: fabric.Canvas) => {
@@ -68,7 +66,6 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
       height: state.value.canvasDimensions.height / 2
     })
 
-    console.log('boundingBox', boundingBox)
     store.commit(MutationEnum.SAVE_CANVAS, {
       id: 'front',
       canvas: state.value.canvas
@@ -79,9 +76,6 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
       id: 'front',
       boundingBox
     })
-
-    // state.value.boundingBox = boundingBox
-    // emit('boundingBoxCreated', boundingBox)
 
     checkBoundingBox(state.value.canvas, {
       top: boundingBox.top,

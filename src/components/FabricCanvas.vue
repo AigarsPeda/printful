@@ -1,10 +1,10 @@
 <script setup lang="ts">
 defineProps<{
+  bgImage: string
   dimensions: {
     width: number
     height: number
   }
-  bgImage: string
 }>()
 
 import { fabric } from 'fabric'

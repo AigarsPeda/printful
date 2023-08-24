@@ -2,7 +2,7 @@
   <div class="design-setting-card-container">
     <div class="design-setting-card_color" />
     <div>
-      <div class="design-setting-card_potion">
+      <div class="design-setting-card">
         <label> Left: {{ position.left }} </label>
         <input
           type="range"
@@ -18,7 +18,7 @@
           "
         />
       </div>
-      <div class="design-setting-card_potion">
+      <div class="design-setting-card">
         <label> Top: {{ position.top }} </label>
         <input
           type="range"
@@ -28,8 +28,8 @@
           @input="
             handlePotionUpdate({
               id: item.id,
-              top: handleRange($event),
-              left: position.left
+              left: position.left,
+              top: handleRange($event)
             })
           "
         />
@@ -101,13 +101,13 @@ const handleRange = (event: Event) => {
   background-color: v-bind('`${item.fill}`');
 }
 
-.design-setting-card_potion {
+.design-setting-card {
   display: flex;
   margin-top: 0.5rem;
   flex-direction: column;
 }
 
-.design-setting-card_potion label {
+.design-setting-card label {
   font-weight: 500;
   color: '#111827';
   text-align: left;
