@@ -37,6 +37,7 @@ import AppHeader from '@/components/AppHeader.vue'
 import Button from '@/components/Button.vue'
 import DesignSettingCard from '@/components/DesignSettingCard.vue'
 import FabricCanvas from '@/components/FabricCanvas.vue'
+import { COLORS } from '@/hardcoded'
 import { MutationEnum } from '@/store/mutation/mutation.types'
 import { useStore } from '@/store/store'
 import { type CustomRectI } from '@/types/fabric.types'
@@ -44,9 +45,9 @@ import addBoundingBoxToCanvas from '@/utils/addBoundingBoxToCanvas'
 import checkBoundingBox from '@/utils/checkBoundingBox'
 import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import loadSateToCanvas from '@/utils/loadSateToCanvas'
+import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
-import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
 
 type StateType = {
   canvasDimensions: {
@@ -128,7 +129,7 @@ const handleClick = () => {
     left: 120,
     width: 50,
     height: 50,
-    fill: '#059669',
+    fill: COLORS[Math.floor(Math.random() * COLORS.length)],
     id: (lengthCanvasObject.value + 1).toString()
   })
 }
