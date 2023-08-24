@@ -16,6 +16,7 @@ const addBoundingBoxToCanvas = (
   const boundingBox = new fabric.Rect({
     fill: 'none',
     evented: false,
+    selectable: false,
     hasBorders: false,
     hasControls: false,
     lockMovementX: true,
