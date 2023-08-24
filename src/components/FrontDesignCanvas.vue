@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="app-container_btn">
       <ul>
-        <li v-for="(item, index) in store.state.canvasObject">
+        <li v-for="(item, index) in store.state.canvasObject.front">
           <DesignSettingCard
             :key="index"
             :item="item"
@@ -13,15 +13,20 @@
         </li>
       </ul>
     </div>
-    <div>
-      <FabricCanvas
-        @mouse:dblclick="handleClick"
-        @canvas-created="handleCreated"
-        bgImage="@/assets/images/front.jpg"
-        :dimensions="state.canvasDimensions"
-      />
-      <div class="btn-container">
-        <Button color="purple" title="Add design" @click="handleClick" />
+    <div class="fabric-canvas-container">
+      <div>
+        <FabricCanvas
+          @mouse:dblclick="handleClick"
+          @canvas-created="handleCreated"
+          bgImage="@/assets/images/front.jpg"
+          :dimensions="state.canvasDimensions"
+        />
+        <div class="btn-container">
+          <Button color="purple" title="Add design" @click="handleClick" />
+        </div>
+      </div>
+      <div class="fabric-canvas-side-container">
+        <SideDesignCanvas />
       </div>
     </div>
   </div>
@@ -42,6 +47,8 @@ import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
+import SideDesignCanvas from '@/components/SideDesignCanvas.vue'
+import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
 
 type StateType = {
   canvasDimensions: {
@@ -73,7 +80,7 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
   }
 
   loadBgImageToCanvas(imgUrl(`../assets/images/front.jpg`), state.value.canvas)
-  loadSateToCanvas(state.value.canvas, store.state.canvasObject)
+  loadSateToCanvas(state.value.canvas, store.state.canvasObject.front)
   const boundingBox = addBoundingBoxToCanvas(state.value.canvas, true, {
     width: state.value.canvasDimensions.width / 2,
     height: state.value.canvasDimensions.height / 2
@@ -132,25 +139,15 @@ const handleClick = () => {
 watch(store.state.canvasObject, () => {
   if (!state.value.canvas) return
 
-  const obj = state.value.canvas.getObjects() as CustomRectI[]
-  const ids = obj?.map((o) => o.id)
-  const filterNewVal = store.state.canvasObject.filter((o) => !ids?.includes(o.id))
-
-  loadSateToCanvas(state.value.canvas, filterNewVal)
+  removeObjWithoutIdFromCanvas(state.value.canvas)
+  loadSateToCanvas(state.value.canvas, store.state.canvasObject.front)
 })
-
-// const props = defineProps<{
-//   title: string
-//   onClick: () => void
-//   color?: 'green' | 'purple'
-// }>()
 </script>
 
 <style scoped>
 .app-container {
   display: flex;
   padding: 20px;
-  justify-content: space-between;
 }
 
 .app-container_btn {
@@ -171,5 +168,20 @@ watch(store.state.canvasObject, () => {
 
 .app-container_btn li {
   margin-bottom: 10px;
+}
+
+.fabric-canvas-container {
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fabric-canvas-side-container {
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
 }
 </style>

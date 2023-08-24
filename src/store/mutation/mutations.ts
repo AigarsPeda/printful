@@ -10,18 +10,31 @@ const mutations: MutationTree<State> & MutationsType = {
     state.name = payload
   },
   [MutationEnum.ADD_RECT](state: State, payload: RectType) {
-    state.canvasObject.push(payload)
+    state.canvasObject.front.push(payload)
   },
   [MutationEnum.UPDATE_RECT_POSITION](
     state: State,
     payload: { id: string; top: number; left: number }
   ) {
-    state.canvasObject = state.canvasObject.map((rect) => {
+    state.canvasObject.front = state.canvasObject.front.map((rect) => {
       if (rect.id === payload.id) {
         return {
           ...rect,
           top: payload.top,
           left: payload.left
+        }
+      }
+      return rect
+    })
+
+    console.log('state.canvasObject.front', state.canvasObject.front)
+
+    state.canvasObject.back = state.canvasObject.back.map((rect) => {
+      if (rect.id === payload.id) {
+        return {
+          ...rect,
+          top: payload.top / 2,
+          left: payload.left / 2
         }
       }
       return rect
