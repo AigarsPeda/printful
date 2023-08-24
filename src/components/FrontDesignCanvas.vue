@@ -26,7 +26,10 @@
         </div>
       </div>
       <div class="fabric-canvas-side-container">
-        <SideDesignCanvas />
+        <SideDesignCanvas
+          bgImage="../assets/images/back.jpg"
+          :rects="store.state.canvasObject.back"
+        />
       </div>
     </div>
   </div>

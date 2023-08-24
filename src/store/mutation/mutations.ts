@@ -1,5 +1,6 @@
 import { MutationEnum, type MutationsType } from '@/store/mutation/mutation.types'
 import type { RectType, State } from '@/store/state'
+import { h } from 'vue'
 import type { MutationTree } from 'vuex'
 
 const mutations: MutationTree<State> & MutationsType = {
@@ -11,6 +12,14 @@ const mutations: MutationTree<State> & MutationsType = {
   },
   [MutationEnum.ADD_RECT](state: State, payload: RectType) {
     state.canvasObject.front.push(payload)
+
+    state.canvasObject.back.push({
+      ...payload,
+      top: payload.top / 2,
+      left: payload.left / 2,
+      height: payload.height / 2,
+      width: payload.width / 2
+    })
   },
   [MutationEnum.UPDATE_RECT_POSITION](
     state: State,
@@ -26,8 +35,6 @@ const mutations: MutationTree<State> & MutationsType = {
       }
       return rect
     })
-
-    console.log('state.canvasObject.front', state.canvasObject.front)
 
     state.canvasObject.back = state.canvasObject.back.map((rect) => {
       if (rect.id === payload.id) {

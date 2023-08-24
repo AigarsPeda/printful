@@ -7,7 +7,6 @@ const removeObjWithoutIdFromCanvas = (canvas: fabric.Canvas) => {
   // get objects that have key id
   const objWihId = obj.filter((o) => o.id)
 
-  console.log(objWihId)
   canvas.remove(...objWihId)
 }
 

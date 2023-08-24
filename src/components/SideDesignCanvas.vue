@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import FabricCanvas from '@/components/FabricCanvas.vue'
-import { useStore } from '@/store/store'
+import type { RectType } from '@/store/state'
 import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
@@ -26,7 +26,10 @@ type StateType = {
   boundingBox: fabric.Rect | null
 }
 
-const store = useStore()
+const props = defineProps<{
+  bgImage: string
+  rects: RectType[]
+}>()
 
 const state = ref<StateType>({
   canvasDimensions: {
@@ -44,16 +47,16 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
     return new URL(str, import.meta.url)
   }
 
-  loadBgImageToCanvas(imgUrl(`../assets/images/back.jpg`), state.value.canvas)
-  loadSateToCanvas(state.value.canvas, store.state.canvasObject.back, false)
+  loadBgImageToCanvas(imgUrl(`${props.bgImage}`), state.value.canvas)
+  loadSateToCanvas(state.value.canvas, props.rects, false)
 }
 
 // if canvasContent is updated add the new object to the canvas
-watch(store.state.canvasObject, () => {
+watch(props, () => {
   if (!state.value.canvas) return
 
   removeObjWithoutIdFromCanvas(state.value.canvas)
-  loadSateToCanvas(state.value.canvas, store.state.canvasObject.back)
+  loadSateToCanvas(state.value.canvas, props.rects, false)
 })
 </script>
 
