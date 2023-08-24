@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import type { CustomRectI } from '@/types/fabric.types'
-import type { RectType } from '../store/state'
+import type { RectType } from '@/store/state'
 
-const props = defineProps<{
-  // id: string
-  // color: string
-  // title: string
+defineProps<{
   item: RectType
   position: { left: number; top: number }
   boundingBox: fabric.Rect | undefined
@@ -13,29 +9,14 @@ const props = defineProps<{
 }>()
 
 const handleRange = (event: Event) => {
-  // console.log((event.target as HTMLInputElement).value)
-
-  // return int
   return parseInt((event.target as HTMLInputElement).value)
-
-  // props.handlePotionUpdate({
-  //   id: obj.id,
-  //   top: obj.top || 0,
-  //   left: obj.left || 0
-  // })
 }
-
-console.log('props', props.boundingBox?.top)
-console.log('props --->', (props.boundingBox?.top || 0) + (props.boundingBox?.height || 0))
 </script>
 
 <template>
   <div class="design-setting-card-container">
     <div class="design-setting-card_color" />
     <div>
-      <p class="design-setting-card_title">
-        {{ item.fill }}
-      </p>
       <div class="design-setting-card_potion">
         <label> Left: {{ position.left }} </label>
         <input
@@ -87,13 +68,6 @@ console.log('props --->', (props.boundingBox?.top || 0) + (props.boundingBox?.he
   color: '#111827';
   margin-right: 1rem;
   background-color: v-bind('`${item.fill}`');
-}
-
-.design-setting-card_title {
-  font-size: 1rem;
-  color: '#111827';
-  font-weight: 500;
-  margin-left: 1rem;
 }
 
 .design-setting-card_potion {
