@@ -1,7 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  hight: number
-  width: number
+  dimensions: {
+    width: number
+    height: number
+  }
   bgImage: string
 }>()
 
@@ -22,7 +24,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasReference" id="canvas" :width="width" :height="hight" />
+  <canvas id="canvas" ref="canvasReference" :width="dimensions.width" :height="dimensions.height" />
 </template>
 
 <style scoped>

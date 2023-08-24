@@ -1,8 +1,31 @@
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+
+const props = defineProps<{
   title: string
   onClick: () => void
+  color?: 'green' | 'purple'
 }>()
+
+const selectedColor = computed(() => {
+  if (props.color === 'green') {
+    return {
+      backgroundColor: '#059669',
+      color: '#fff'
+    }
+  }
+  if (props.color === 'purple') {
+    return {
+      backgroundColor: '#7e22ce',
+      color: '#fff'
+    }
+  }
+
+  return {
+    backgroundColor: '#e2e8f0',
+    color: '#0f172a'
+  }
+})
 </script>
 
 <template>
@@ -14,13 +37,13 @@ defineProps<{
 <style scoped>
 .btn {
   border: none;
-  color: #fff;
   cursor: pointer;
   font-weight: 600;
   padding: 10px 20px;
   border-radius: 5px;
-  background-color: #9333ea;
   transition: all 0.3s ease-in-out;
+  color: v-bind('`${selectedColor.color}`');
+  background-color: v-bind('`${selectedColor.backgroundColor}`');
 }
 
 .btn:hover {
