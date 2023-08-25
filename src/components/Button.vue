@@ -1,3 +1,9 @@
+<template>
+  <button class="btn" type="button" @click="onClick">
+    {{ title }}
+  </button>
+</template>
+
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -27,12 +33,6 @@ const selectedColor = computed(() => {
   }
 })
 </script>
-
-<template>
-  <button class="btn" type="button" @click="onClick">
-    {{ title }}
-  </button>
-</template>
 
 <style scoped>
 .btn {

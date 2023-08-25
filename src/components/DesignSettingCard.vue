@@ -10,11 +10,14 @@
           :min="boundingBox?.left || 0"
           :max="(boundingBox?.left || 0) + (boundingBox?.width || 0) - item.width"
           @input="
-            handlePotionUpdate({
-              id: item.id,
-              top: position.top,
-              left: handleRange($event)
-            })
+            handlePotionUpdate(
+              {
+                id: item.id,
+                top: position.top,
+                left: handleRange($event)
+              },
+              store
+            )
           "
         />
       </div>
@@ -26,11 +29,14 @@
           :min="boundingBox?.top || 0"
           :max="(boundingBox?.top || 0) + (boundingBox?.height || 0) - item.height"
           @input="
-            handlePotionUpdate({
-              id: item.id,
-              left: position.left,
-              top: handleRange($event)
-            })
+            handlePotionUpdate(
+              {
+                id: item.id,
+                left: position.left,
+                top: handleRange($event)
+              },
+              store
+            )
           "
         />
       </div>
@@ -39,10 +45,9 @@
 </template>
 
 <script setup lang="ts">
-import { MutationEnum } from '@/store/mutation/mutation.types'
 import { type RectType } from '@/store/state'
 import { store } from '@/store/store'
-import type { CustomRectI } from '@/types/fabric.types'
+import handlePotionUpdate from '@/utils/handlePotionUpdate'
 import { computed } from 'vue'
 
 defineProps<{
@@ -53,31 +58,6 @@ defineProps<{
 const boundingBox = computed(
   () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
 )
-
-const handlePotionUpdate = (obj: { id: string; top: number; left: number }) => {
-  const canva = store.state.canvas.find((c) => c.id === 'front')
-  const objCanvas = canva?.canva?.getObjects()
-
-  if (!objCanvas) return
-
-  const customObj = objCanvas as CustomRectI[]
-  const objCanvasFilter = customObj.find((o) => o.id === obj.id)
-
-  if (!objCanvasFilter) return
-
-  objCanvasFilter.set({
-    top: obj.top,
-    left: obj.left
-  })
-
-  store.commit(MutationEnum.UPDATE_RECT_POSITION, {
-    id: obj.id,
-    top: obj.top || 0,
-    left: obj.left || 0
-  })
-
-  canva?.canva?.renderAll()
-}
 
 const handleRange = (event: Event) => {
   return parseInt((event.target as HTMLInputElement).value)

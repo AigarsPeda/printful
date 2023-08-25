@@ -1,5 +1,7 @@
 # tshirt-designer-app
 
+_First time using Vue.js. Don't judge too harshly._
+
 ### Requirements
 
 - [Node.js](https://nodejs.org/en/)

@@ -1,3 +1,7 @@
+<template>
+  <canvas id="canvas" ref="canvasReference" :width="dimensions.width" :height="dimensions.height" />
+</template>
+
 <script setup lang="ts">
 defineProps<{
   bgImage: string
@@ -17,15 +21,10 @@ onMounted(() => {
   const canvas = new fabric.Canvas(canvasReference.value)
   emit('canvas-created', canvas)
   canvas.on('mouse:dblclick', () => {
-    console.log('double click')
     emit('mouse:dblclick')
   })
 })
 </script>
-
-<template>
-  <canvas id="canvas" ref="canvasReference" :width="dimensions.width" :height="dimensions.height" />
-</template>
 
 <style scoped>
 canvas {

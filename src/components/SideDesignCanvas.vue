@@ -34,6 +34,7 @@ const props = defineProps<{
   bgImage: string
   canvasId: string
   rects: RectType[]
+  isReverse?: boolean
   isBoundingBox?: boolean
   isContentEditable?: boolean
   canvasDimensions: {
@@ -64,7 +65,8 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
 
   store.commit(MutationEnum.SAVE_CANVAS, {
     id: props.canvasId,
-    canvas: fabricCanvas
+    canvas: fabricCanvas,
+    isReverse: props.isReverse
   })
 
   if (props.isBoundingBox) {

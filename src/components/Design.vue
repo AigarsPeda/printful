@@ -40,6 +40,7 @@
         />
         <div class="design-canvas-side-container_side">
           <SideDesignCanvas
+            isReverse
             canvasId="sideR"
             bgImage="../assets/images/side.jpg"
             :rects="store.state.canvasObject.sideR"

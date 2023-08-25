@@ -16,6 +16,6 @@ export enum ActionEnum {
 export interface ActionsType {
   [ActionEnum.SAVE_CANVAS](
     { commit }: AugmentedActionContextType,
-    payload: { canvas: fabric.Canvas; id: string }
+    payload: { canvas: fabric.Canvas; id: string; isReverse: boolean }
   ): void
 }

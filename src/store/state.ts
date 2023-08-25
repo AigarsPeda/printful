@@ -1,5 +1,6 @@
-import { fabric } from 'fabric'
+import { MAIN_CANVAS, PINK, PURPLE } from '@/hardcoded'
 import calInvertPosition from '@/utils/calInvertPosition'
+import { fabric } from 'fabric'
 
 export type RectType = {
   id: string
@@ -19,6 +20,7 @@ export type StateType = {
   canvas: {
     canva: fabric.Canvas | null
     id: string | null
+    isReverse: boolean
   }[]
   boundingBoxes: {
     boundingBox: fabric.Rect | null
@@ -32,22 +34,12 @@ export type StateType = {
   }
 }
 
-const PURPLE = {
-  left: 210,
-  top: 250
-}
-
-const PINK = {
-  left: 230,
-  top: 280
-}
-
 //set state
 export const state: StateType = {
   canvas: [],
   mainCanvasDimensions: {
-    width: 500,
-    height: 700
+    width: MAIN_CANVAS.width,
+    height: MAIN_CANVAS.height
   },
   boundingBoxes: [],
   canvasObject: {
@@ -112,7 +104,7 @@ export const state: StateType = {
         height: 15,
         fill: '#7c3aed',
         top: PURPLE.top / 4,
-        left: calInvertPosition(500 / 4, PURPLE.left / 4)
+        left: calInvertPosition(MAIN_CANVAS.width / 4, PURPLE.left / 4)
       },
       {
         id: '2',
@@ -120,7 +112,7 @@ export const state: StateType = {
         height: 15,
         fill: '#db2777',
         top: PINK.top / 4,
-        left: calInvertPosition(500 / 4, PINK.left / 4)
+        left: calInvertPosition(MAIN_CANVAS.width / 4, PINK.left / 4)
       }
     ]
   }

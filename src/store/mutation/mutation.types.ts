@@ -19,6 +19,7 @@ export type MutationsType<S = StateType> = {
     state: S,
     payload: {
       id: string
+      isReverse: boolean
       canvas: fabric.Canvas
     }
   ): void

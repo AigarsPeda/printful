@@ -17,20 +17,28 @@ const mutations: MutationTree<StateType> & MutationsType = {
     state: StateType,
     payload: { id: string; top: number; left: number }
   ) {
-    const canvasObjectKeys = Object.keys(state.canvasObject) as (keyof StateType['canvasObject'])[]
+    for (const key of state.canvas) {
+      const id = key.id as keyof StateType['canvasObject']
+      const isReverse = key.isReverse
+      const size = getCanvasSize(state, id)
 
-    for (const key of canvasObjectKeys) {
-      state.canvasObject[key] = updateCanvasObjectArray(
-        state.canvasObject[key],
+      state.canvasObject[id] = updateCanvasObjectArray(
+        state.canvasObject[id],
         payload,
-        calculateSizeRatio(state.mainCanvasDimensions, getCanvasSize(state, key))
+        isReverse,
+        size,
+        calculateSizeRatio(state.mainCanvasDimensions, size)
       )
     }
   },
-  [MutationEnum.SAVE_CANVAS](state: StateType, payload: { canvas: fabric.Canvas; id: string }) {
+  [MutationEnum.SAVE_CANVAS](
+    state: StateType,
+    payload: { canvas: fabric.Canvas; id: string; isReverse: boolean }
+  ) {
     state.canvas.push({
       id: payload.id,
-      canva: payload.canvas
+      canva: payload.canvas,
+      isReverse: payload.isReverse
     })
   },
   [MutationEnum.SAVE_BOUNDING_BOX](
