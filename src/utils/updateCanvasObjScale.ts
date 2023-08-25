@@ -12,25 +12,18 @@ const updateCanvasObjScale = (canvas: fabric.Canvas, store: StoreType) => {
   })
 
   canvas.on('object:modified', function (modifiedObj) {
-    console.log('modifiedObj', modifiedObj)
+    const scale = modifiedObj.target?.getObjectScaling()
 
-    if (modifiedObj.action === 'scale') {
-      const scale = modifiedObj.target?.getObjectScaling()
-
-      if (!scale) {
-        console.error('scale is undefined')
-        return
-      }
-
-      console.log('scale.scaleX', Math.round(scale.scaleX * 100) / 100)
-      console.log('scale.scaleY', Math.round(scale.scaleY * 100) / 100)
-
-      store.commit(MutationEnum.UPDATE_RECT_SCALE, {
-        ids: selectedObjIds,
-        scaleX: Math.round(scale.scaleX * 100) / 100,
-        scaleY: Math.round(scale.scaleY * 100) / 100
-      })
+    if (!scale) {
+      console.error('scale is undefined')
+      return
     }
+
+    store.commit(MutationEnum.UPDATE_RECT_SCALE, {
+      ids: selectedObjIds,
+      scaleX: Math.round(scale.scaleX * 100) / 100,
+      scaleY: Math.round(scale.scaleY * 100) / 100
+    })
 
     selectedObjIds = []
   })
