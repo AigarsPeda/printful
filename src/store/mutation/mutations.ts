@@ -54,13 +54,6 @@ const mutations: MutationTree<StateType> & MutationsType = {
     state: StateType,
     payload: { ids: string[]; scaleX: number; scaleY: number }
   ) {
-    for (const key of state.canvasObject.front) {
-      if (payload.ids.includes(key.id)) {
-        key.width = key.width * payload.scaleX
-        key.height = key.height * payload.scaleY
-      }
-    }
-
     for (const key of state.canvas) {
       const id = key.id as keyof StateType['canvasObject']
 
