@@ -81,6 +81,17 @@ const mutations: MutationTree<StateType> & MutationsType = {
         }
       }
     }
+  },
+  [MutationEnum.UPDATE_RECK_COLOR](state: StateType, payload: { id: string; color: string }) {
+    for (const savedCanvas of state.canvas) {
+      const id = savedCanvas.id as keyof StateType['canvasObject']
+
+      for (const obj of state.canvasObject[id]) {
+        if (obj.id === payload.id) {
+          obj.fill = payload.color
+        }
+      }
+    }
   }
 }
 

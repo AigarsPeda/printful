@@ -1,6 +1,6 @@
 <template>
   <div class="design-setting-card-container">
-    <div class="design-setting-card_color" />
+    <button class="design-setting-card_color" @click="openModal">Change color</button>
     <div>
       <div class="design-setting-card">
         <label> Left: {{ position.left }} </label>
@@ -42,6 +42,7 @@
       </div>
     </div>
   </div>
+  <ColorModal :closeModal="closeModal" :isOpened="isModalVisible" :selectedObjId="item.id" />
 </template>
 
 <script setup lang="ts">
@@ -49,12 +50,23 @@ import { type RectType } from '@/store/state'
 import { store } from '@/store/store'
 import eventToNumber from '@/utils/eventToNumber'
 import handlePotionUpdate from '@/utils/handlePotionUpdate'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import ColorModal from '@/components/ColorModal.vue'
 
 defineProps<{
   item: RectType
   position: { left: number; top: number }
 }>()
+
+const isModalVisible = ref<boolean>(false)
+
+const openModal = () => {
+  isModalVisible.value === false ? (isModalVisible.value = true) : (isModalVisible.value = false)
+}
+
+const closeModal = () => {
+  isModalVisible.value = false
+}
 
 const boundingBox = computed(
   () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
@@ -71,8 +83,7 @@ const boundingBox = computed(
 }
 
 .design-setting-card_color {
-  width: 2rem;
-  height: 2rem;
+  border: none;
   color: '#111827';
   margin-right: 1rem;
   background-color: v-bind('`${item.fill}`');

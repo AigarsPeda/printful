@@ -10,7 +10,7 @@ import { computed } from 'vue'
 const props = defineProps<{
   title: string
   onClick: () => void
-  color?: 'green' | 'purple'
+  color?: 'green' | 'purple' | 'red'
 }>()
 
 const selectedColor = computed(() => {
@@ -23,6 +23,13 @@ const selectedColor = computed(() => {
   if (props.color === 'purple') {
     return {
       backgroundColor: '#7e22ce',
+      color: '#fff'
+    }
+  }
+
+  if (props.color === 'red') {
+    return {
+      backgroundColor: '#ef4444',
       color: '#fff'
     }
   }
