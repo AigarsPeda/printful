@@ -18,15 +18,15 @@ export type MutationsType<S = StateType> = {
   [MutationEnum.SAVE_CANVAS](
     state: S,
     payload: {
-      canvas: fabric.Canvas
       id: string
+      canvas: fabric.Canvas
     }
   ): void
   [MutationEnum.SAVE_BOUNDING_BOX](
     state: S,
     payload: {
-      boundingBox: fabric.Rect
       id: string
+      boundingBox: fabric.Rect
     }
   ): void
 }

@@ -1,8 +1,10 @@
 import { MutationEnum, type MutationsType } from '@/store/mutation/mutation.types'
 import addCanvasObjectArray from '@/store/mutation/utils/addCanvasObjectArray'
+import getCanvasSize from '@/store/mutation/utils/getCanvasSize'
 import updateCanvasObjectArray from '@/store/mutation/utils/updateCanvasObjectArray'
 import type { RectType, StateType } from '@/store/state'
 import type { MutationTree } from 'vuex'
+import calculateSizeRatio from '@/utils/calculateSizeRatio'
 
 const mutations: MutationTree<StateType> & MutationsType = {
   [MutationEnum.ADD_RECT](state: StateType, payload: RectType) {
@@ -15,15 +17,20 @@ const mutations: MutationTree<StateType> & MutationsType = {
     state: StateType,
     payload: { id: string; top: number; left: number }
   ) {
-    state.canvasObject.front = updateCanvasObjectArray(state.canvasObject.front, payload)
-    state.canvasObject.back = updateCanvasObjectArray(state.canvasObject.back, payload, 2)
-    state.canvasObject.sideL = updateCanvasObjectArray(state.canvasObject.sideL, payload, 4)
-    state.canvasObject.sideR = updateCanvasObjectArray(state.canvasObject.sideR, payload, 4)
+    const canvasObjectKeys = Object.keys(state.canvasObject) as (keyof StateType['canvasObject'])[]
+
+    for (const key of canvasObjectKeys) {
+      state.canvasObject[key] = updateCanvasObjectArray(
+        state.canvasObject[key],
+        payload,
+        calculateSizeRatio(state.mainCanvasDimensions, getCanvasSize(state, key))
+      )
+    }
   },
   [MutationEnum.SAVE_CANVAS](state: StateType, payload: { canvas: fabric.Canvas; id: string }) {
     state.canvas.push({
-      canva: payload.canvas,
-      id: payload.id
+      id: payload.id,
+      canva: payload.canvas
     })
   },
   [MutationEnum.SAVE_BOUNDING_BOX](
@@ -31,8 +38,8 @@ const mutations: MutationTree<StateType> & MutationsType = {
     payload: { boundingBox: fabric.Rect; id: string }
   ) {
     state.boundingBoxes.push({
-      boundingBox: payload.boundingBox,
-      id: payload.id
+      id: payload.id,
+      boundingBox: payload.boundingBox
     })
   }
 }

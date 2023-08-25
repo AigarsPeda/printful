@@ -18,6 +18,7 @@
       <div>
         <SideDesignCanvas
           isBoundingBox
+          canvasId="front"
           isContentEditable
           bgImage="../assets/images/front.jpg"
           :rects="store.state.canvasObject.front"
@@ -29,6 +30,7 @@
       </div>
       <div class="design-canvas-side-container">
         <SideDesignCanvas
+          canvasId="back"
           bgImage="../assets/images/back.jpg"
           :rects="store.state.canvasObject.back"
           :canvasDimensions="{
@@ -38,6 +40,7 @@
         />
         <div class="design-canvas-side-container_side">
           <SideDesignCanvas
+            canvasId="sideR"
             bgImage="../assets/images/side.jpg"
             :rects="store.state.canvasObject.sideR"
             :canvasDimensions="{
@@ -46,6 +49,7 @@
             }"
           />
           <SideDesignCanvas
+            canvasId="sideL"
             bgImage="../assets/images/side-l.jpg"
             :rects="store.state.canvasObject.sideL"
             :canvasDimensions="{

@@ -12,7 +12,7 @@
 import FabricCanvas from '@/components/FabricCanvas.vue'
 import { MutationEnum } from '@/store/mutation/mutation.types'
 import type { RectType } from '@/store/state'
-import { store } from '@/store/store'
+import { useStore } from '@/store/store'
 import addBoundingBoxToCanvas from '@/utils/addBoundingBoxToCanvas'
 import checkBoundingBox from '@/utils/checkBoundingBox'
 import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
@@ -20,19 +20,19 @@ import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
 import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
 import { fabric } from 'fabric'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 type StateType = {
   canvasDimensions: {
     width: number
     height: number
   }
-
-  canvas: fabric.Canvas | null
+  // canvas: fabric.Canvas | null
 }
 
 const props = defineProps<{
   bgImage: string
+  canvasId: string
   rects: RectType[]
   isBoundingBox?: boolean
   isContentEditable?: boolean
@@ -46,54 +46,56 @@ const state = ref<StateType>({
   canvasDimensions: {
     width: props.canvasDimensions.width,
     height: props.canvasDimensions.height
-  },
-  canvas: null
+  }
+})
+
+const store = useStore()
+const canva = computed(() => {
+  return store.state.canvas.find((item) => item.id === props.canvasId)
 })
 
 const handleCreated = (fabricCanvas: fabric.Canvas) => {
-  state.value.canvas = fabricCanvas
-
   const imgUrl = (str: string) => {
     return new URL(str, import.meta.url)
   }
 
-  loadBgImageToCanvas(imgUrl(`${props.bgImage}`), state.value.canvas)
-  loadSateToCanvas(state.value.canvas, props.rects, props.isContentEditable)
+  loadBgImageToCanvas(imgUrl(`${props.bgImage}`), fabricCanvas)
+  loadSateToCanvas(fabricCanvas, props.rects, props.isContentEditable)
+
+  store.commit(MutationEnum.SAVE_CANVAS, {
+    id: props.canvasId,
+    canvas: fabricCanvas
+  })
 
   if (props.isBoundingBox) {
-    const boundingBox = addBoundingBoxToCanvas(state.value.canvas, true, {
+    const boundingBox = addBoundingBoxToCanvas(fabricCanvas, true, {
       width: state.value.canvasDimensions.width / 2,
       height: state.value.canvasDimensions.height / 2
     })
 
-    store.commit(MutationEnum.SAVE_CANVAS, {
-      id: 'front',
-      canvas: state.value.canvas
-    })
-
     // state.value.boundingBox = boundingBox
     store.commit(MutationEnum.SAVE_BOUNDING_BOX, {
-      id: 'front',
+      id: props.canvasId,
       boundingBox
     })
 
-    checkBoundingBox(state.value.canvas, {
+    checkBoundingBox(fabricCanvas, {
       top: boundingBox.top,
       left: boundingBox.left,
       width: state.value.canvasDimensions.width / 2,
       height: state.value.canvasDimensions.height / 2
     })
 
-    updateCanvasObjPositionAfterDrag(state.value.canvas)
+    updateCanvasObjPositionAfterDrag(fabricCanvas)
   }
 }
 
 // if canvasContent is updated add the new object to the canvas
 watch(props, () => {
-  if (!state.value.canvas) return
+  if (!canva.value?.canva) return
 
-  removeObjWithoutIdFromCanvas(state.value.canvas)
-  loadSateToCanvas(state.value.canvas, props.rects, props.isContentEditable)
+  removeObjWithoutIdFromCanvas(canva.value?.canva)
+  loadSateToCanvas(canva.value?.canva, props.rects, props.isContentEditable)
 })
 </script>
 
