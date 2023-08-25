@@ -20,6 +20,7 @@ import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
 import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
 import updateCanvasObjScale from '@/utils/updateCanvasObjScale'
+import updateMultipleCanvaObjectPositionAtOnce from '@/utils/updateMultipleCanvaObjectPositionAtOnce'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
 
@@ -60,14 +61,15 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
     return new URL(str, import.meta.url)
   }
 
-  loadBgImageToCanvas(imgUrl(`${props.bgImage}`), fabricCanvas)
-  loadSateToCanvas(fabricCanvas, props.rects, props.isContentEditable)
-
   store.commit(MutationEnum.SAVE_CANVAS, {
     id: props.canvasId,
     canvas: fabricCanvas,
     isReverse: props.isReverse
   })
+
+  updateMultipleCanvaObjectPositionAtOnce(fabricCanvas, store)
+  loadBgImageToCanvas(imgUrl(`${props.bgImage}`), fabricCanvas)
+  loadSateToCanvas(fabricCanvas, props.rects, props.isContentEditable)
 
   if (props.isBoundingBox) {
     const boundingBox = addBoundingBoxToCanvas(fabricCanvas, true, {
@@ -93,7 +95,6 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
   }
 }
 
-// if canvasContent is updated add the new object to the canvas
 watch(props, () => {
   if (!canva.value?.canva) return
 

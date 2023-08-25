@@ -64,6 +64,23 @@ const mutations: MutationTree<StateType> & MutationsType = {
         }
       }
     }
+  },
+  [MutationEnum.UPDATE_MULTIPLE_RECT_POSITION](
+    state: StateType,
+    payload: { ids: string[]; top: number; left: number }
+  ) {
+    console.log('UPDATE_MULTIPLE_RECT_POSITION', payload)
+
+    for (const savedCanvas of state.canvas) {
+      const id = savedCanvas.id as keyof StateType['canvasObject']
+
+      for (const obj of state.canvasObject[id]) {
+        if (payload.ids.includes(obj.id)) {
+          obj.left = obj.left + payload.left
+          obj.top = obj.top + payload.top
+        }
+      }
+    }
   }
 }
 

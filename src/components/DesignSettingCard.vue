@@ -14,7 +14,7 @@
               {
                 id: item.id,
                 top: position.top,
-                left: handleRange($event)
+                left: eventToNumber($event)
               },
               store
             )
@@ -33,7 +33,7 @@
               {
                 id: item.id,
                 left: position.left,
-                top: handleRange($event)
+                top: eventToNumber($event)
               },
               store
             )
@@ -47,6 +47,7 @@
 <script setup lang="ts">
 import { type RectType } from '@/store/state'
 import { store } from '@/store/store'
+import eventToNumber from '@/utils/eventToNumber'
 import handlePotionUpdate from '@/utils/handlePotionUpdate'
 import { computed } from 'vue'
 
@@ -58,10 +59,6 @@ defineProps<{
 const boundingBox = computed(
   () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
 )
-
-const handleRange = (event: Event) => {
-  return parseInt((event.target as HTMLInputElement).value)
-}
 </script>
 
 <style scoped>
