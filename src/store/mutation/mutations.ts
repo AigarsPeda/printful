@@ -49,6 +49,28 @@ const mutations: MutationTree<StateType> & MutationsType = {
       id: payload.id,
       boundingBox: payload.boundingBox
     })
+  },
+  [MutationEnum.UPDATE_RECT_SCALE](
+    state: StateType,
+    payload: { ids: string[]; scaleX: number; scaleY: number }
+  ) {
+    for (const key of state.canvasObject.front) {
+      if (payload.ids.includes(key.id)) {
+        key.width = key.width * payload.scaleX
+        key.height = key.height * payload.scaleY
+      }
+    }
+
+    for (const key of state.canvas) {
+      const id = key.id as keyof StateType['canvasObject']
+
+      for (const key of state.canvasObject[id]) {
+        if (payload.ids.includes(key.id)) {
+          key.width = key.width * payload.scaleX
+          key.height = key.height * payload.scaleY
+        }
+      }
+    }
   }
 }
 

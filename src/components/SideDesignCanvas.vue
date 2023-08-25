@@ -19,6 +19,7 @@ import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
 import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
+import updateCanvasObjScale from '@/utils/updateCanvasObjScale'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
 
@@ -27,7 +28,6 @@ type StateType = {
     width: number
     height: number
   }
-  // canvas: fabric.Canvas | null
 }
 
 const props = defineProps<{
@@ -88,7 +88,8 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
       height: state.value.canvasDimensions.height / 2
     })
 
-    updateCanvasObjPositionAfterDrag(fabricCanvas)
+    updateCanvasObjPositionAfterDrag(fabricCanvas, store)
+    updateCanvasObjScale(fabricCanvas, store)
   }
 }
 

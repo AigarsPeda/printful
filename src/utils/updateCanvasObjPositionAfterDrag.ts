@@ -1,9 +1,9 @@
 import { fabric } from 'fabric'
 import { MutationEnum } from '../store/mutation/mutation.types'
-import { store } from '../store/store'
+import { store, type StoreType } from '../store/store'
 import type { CustomRectI } from '../types/fabric.types'
 
-const updateCanvasObjPositionAfterDrag = (canvas: fabric.Canvas) => {
+const updateCanvasObjPositionAfterDrag = (canvas: fabric.Canvas, store: StoreType) => {
   canvas.on('object:modified', function (modifiedObj) {
     const obj = modifiedObj.target as CustomRectI
 
