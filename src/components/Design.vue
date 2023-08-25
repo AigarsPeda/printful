@@ -2,7 +2,7 @@
   <div class="design-container">
     <div class="design-button-list-container">
       <ul>
-        <li v-for="(item, index) in store.state.canvasObject.front">
+        <li v-for="(item, index) in frontCanvasObject">
           <DesignSettingCard
             :key="index"
             :item="item"
@@ -11,7 +11,11 @@
         </li>
       </ul>
       <div class="design-option-button-container">
-        <Button color="purple" title="Add design" @click="handleClick" />
+        <Button
+          color="purple"
+          title="Add design"
+          @click="handleAddObjToCanvas(store, (lengthCanvasObject + 1).toString())"
+        />
       </div>
     </div>
     <div class="design-canvas-container">
@@ -21,7 +25,7 @@
           canvasId="front"
           isContentEditable
           bgImage="../assets/images/front.jpg"
-          :rects="store.state.canvasObject.front"
+          :rects="frontCanvasObject"
           :canvasDimensions="{
             width: canvasDimensions.width,
             height: canvasDimensions.height
@@ -68,37 +72,14 @@
 import Button from '@/components/Button.vue'
 import DesignSettingCard from '@/components/DesignSettingCard.vue'
 import SideDesignCanvas from '@/components/SideDesignCanvas.vue'
-import { COLORS } from '@/hardcoded'
-import { MutationEnum } from '@/store/mutation/mutation.types'
 import { useStore } from '@/store/store'
-import loadSateToCanvas from '@/utils/loadSateToCanvas'
-import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
-import { computed, watch } from 'vue'
+import handleAddObjToCanvas from '@/utils/handleAddObjToCanvas'
+import { computed } from 'vue'
 
 const store = useStore()
+const frontCanvasObject = computed(() => store.getters.getFrontCanva)
 const canvasDimensions = computed(() => store.getters.getMainCanvasDimensions)
 const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
-const canva = computed(() => store.state.canvas.find((c) => c.id === 'front') || null)
-
-const handleClick = () => {
-  if (!canva.value?.canva) return
-
-  store.commit(MutationEnum.ADD_RECT, {
-    top: 230,
-    left: 120,
-    width: 50,
-    height: 50,
-    id: (lengthCanvasObject.value + 1).toString(),
-    fill: COLORS[Math.floor(Math.random() * COLORS.length)]
-  })
-}
-
-watch(store.state.canvasObject, () => {
-  if (!canva.value?.canva) return
-
-  removeObjWithoutIdFromCanvas(canva.value?.canva)
-  loadSateToCanvas(canva.value?.canva, store.state.canvasObject.front)
-})
 </script>
 
 <style scoped>

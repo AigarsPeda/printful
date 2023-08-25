@@ -8,6 +8,9 @@ const getters: GetterTree<StateType, StateType> & GettersType = {
   },
   getMainCanvasDimensions: (state) => {
     return state.mainCanvasDimensions
+  },
+  getFrontCanva: (state) => {
+    return state.canvasObject.front
   }
 }
 
