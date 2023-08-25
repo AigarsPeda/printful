@@ -1,4 +1,5 @@
 import { fabric } from 'fabric'
+import calInvertPosition from '@/utils/calInvertPosition'
 
 export type RectType = {
   id: string
@@ -111,7 +112,7 @@ export const state: StateType = {
         height: 15,
         fill: '#7c3aed',
         top: PURPLE.top / 4,
-        left: PURPLE.left / 4
+        left: calInvertPosition(500 / 4, PURPLE.left / 4)
       },
       {
         id: '2',
@@ -119,7 +120,7 @@ export const state: StateType = {
         height: 15,
         fill: '#db2777',
         top: PINK.top / 4,
-        left: PINK.left / 4
+        left: calInvertPosition(500 / 4, PINK.left / 4)
       }
     ]
   }
