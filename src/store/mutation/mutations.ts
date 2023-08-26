@@ -64,11 +64,11 @@ const mutations: MutationTree<StateType> & MutationsType = {
       const ratio = calculateSizeRatio(state.mainCanvasDimensions, size)
 
       for (const obj of state.canvasObject[id]) {
+        const left = isReverse ? obj.left - payload.left / ratio : obj.left + payload.left / ratio
+
         if (payload.ids.includes(obj.id)) {
           obj.top = obj.top + payload.top / ratio
-          obj.left = isReverse
-            ? calInvertPosition(size.width, obj.left + payload.left / ratio)
-            : obj.left + payload.left / ratio
+          obj.left = left
           obj.width = obj.width * payload.scaleX
           obj.height = obj.height * payload.scaleY
         }
