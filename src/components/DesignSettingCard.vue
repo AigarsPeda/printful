@@ -3,7 +3,7 @@
     <button class="design-setting-card_color" @click="openModal">Change color</button>
     <div>
       <div class="design-setting-card">
-        <label> Left: {{ position.left }} </label>
+        <label> Left: {{ item?.left || 0 }} </label>
         <input
           type="range"
           :value="item?.left || 0"
@@ -13,7 +13,7 @@
             handlePotionUpdate(
               {
                 id: itemId,
-                top: position.top,
+                top: item?.top || 0,
                 left: eventToNumber($event)
               },
               store
@@ -22,7 +22,7 @@
         />
       </div>
       <div class="design-setting-card">
-        <label> Top: {{ position.top }} </label>
+        <label> Top: {{ item?.top || 0 }} </label>
         <input
           type="range"
           :value="item?.top || 0"
@@ -32,7 +32,7 @@
             handlePotionUpdate(
               {
                 id: itemId,
-                left: position.left,
+                left: item?.left || 0,
                 top: eventToNumber($event)
               },
               store
@@ -54,7 +54,6 @@ import { computed, ref } from 'vue'
 
 const props = defineProps<{
   itemId: string
-  position: { left: number; top: number }
 }>()
 
 const store = useStore()

@@ -3,7 +3,7 @@
     <div class="design-button-list-container">
       <ul>
         <li v-for="(item, index) in frontCanvasObject">
-          <DesignSettingCard :itemId="item.id" :position="{ left: item.left, top: item.top }" />
+          <DesignSettingCard :key="index" :itemId="item.id" />
         </li>
       </ul>
       <div class="design-option-button-container">
