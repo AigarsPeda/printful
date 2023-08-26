@@ -85,6 +85,7 @@ const boundingBox = computed(
 .design-setting-card_color {
   border: none;
   color: '#111827';
+  cursor: pointer;
   margin-right: 1rem;
   background-color: v-bind('`${item.fill}`');
 }

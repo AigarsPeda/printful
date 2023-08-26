@@ -3,21 +3,16 @@ import { fabric } from 'fabric'
 
 export enum MutationEnum {
   ADD_RECT = 'ADD_RECT',
-  UPDATE_RECT_POSITION = 'UPDATE_RECT_POSITION',
   SAVE_CANVAS = 'SAVE_CANVAS',
   SAVE_BOUNDING_BOX = 'SAVE_BOUNDING_BOX',
   UPDATE_RECT_SCALE = 'UPDATE_RECT_SCALE',
-  UPDATE_MULTIPLE_RECT_POSITION = 'UPDATE_MULTIPLE_RECT_POSITION',
-  UPDATE_RECK_COLOR = 'UPDATE_RECK_COLOR'
+  UPDATE_RECK_COLOR = 'UPDATE_RECK_COLOR',
+  UPDATE_RECT_POSITION = 'UPDATE_RECT_POSITION'
 }
 
 //Mutation Types
 export type MutationsType<S = StateType> = {
   [MutationEnum.ADD_RECT](state: S, payload: RectType): void
-  [MutationEnum.UPDATE_RECT_POSITION](
-    state: S,
-    payload: { id: string; top: number; left: number }
-  ): void
   [MutationEnum.SAVE_CANVAS](
     state: S,
     payload: {
@@ -37,7 +32,7 @@ export type MutationsType<S = StateType> = {
     state: S,
     payload: { ids: string[]; scaleX: number; scaleY: number }
   ): void
-  [MutationEnum.UPDATE_MULTIPLE_RECT_POSITION](
+  [MutationEnum.UPDATE_RECT_POSITION](
     state: S,
     payload: { ids: string[]; top: number; left: number }
   ): void

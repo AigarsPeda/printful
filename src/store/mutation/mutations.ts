@@ -1,10 +1,10 @@
 import { MutationEnum, type MutationsType } from '@/store/mutation/mutation.types'
 import addCanvasObjectArray from '@/store/mutation/utils/addCanvasObjectArray'
 import getCanvasSize from '@/store/mutation/utils/getCanvasSize'
-import updateCanvasObjectArray from '@/store/mutation/utils/updateCanvasObjectArray'
 import type { RectType, StateType } from '@/store/state'
-import type { MutationTree } from 'vuex'
+import calInvertPosition from '@/utils/calInvertPosition'
 import calculateSizeRatio from '@/utils/calculateSizeRatio'
+import type { MutationTree } from 'vuex'
 
 const mutations: MutationTree<StateType> & MutationsType = {
   [MutationEnum.ADD_RECT](state: StateType, payload: RectType) {
@@ -13,24 +13,7 @@ const mutations: MutationTree<StateType> & MutationsType = {
     addCanvasObjectArray(state.canvasObject.sideL, payload, 4)
     addCanvasObjectArray(state.canvasObject.sideR, payload, 4)
   },
-  [MutationEnum.UPDATE_RECT_POSITION](
-    state: StateType,
-    payload: { id: string; top: number; left: number }
-  ) {
-    for (const key of state.canvas) {
-      const id = key.id as keyof StateType['canvasObject']
-      const isReverse = key.isReverse
-      const size = getCanvasSize(state, id)
 
-      state.canvasObject[id] = updateCanvasObjectArray(
-        state.canvasObject[id],
-        payload,
-        isReverse,
-        size,
-        calculateSizeRatio(state.mainCanvasDimensions, size)
-      )
-    }
-  },
   [MutationEnum.SAVE_CANVAS](
     state: StateType,
     payload: { canvas: fabric.Canvas; id: string; isReverse: boolean }
@@ -65,19 +48,23 @@ const mutations: MutationTree<StateType> & MutationsType = {
       }
     }
   },
-  [MutationEnum.UPDATE_MULTIPLE_RECT_POSITION](
+  [MutationEnum.UPDATE_RECT_POSITION](
     state: StateType,
     payload: { ids: string[]; top: number; left: number }
   ) {
-    console.log('UPDATE_MULTIPLE_RECT_POSITION', payload)
-
     for (const savedCanvas of state.canvas) {
       const id = savedCanvas.id as keyof StateType['canvasObject']
 
+      const size = getCanvasSize(state, id)
+      const isReverse = savedCanvas.isReverse
+      const ratio = calculateSizeRatio(state.mainCanvasDimensions, size)
+
       for (const obj of state.canvasObject[id]) {
         if (payload.ids.includes(obj.id)) {
-          obj.left = obj.left + payload.left
-          obj.top = obj.top + payload.top
+          obj.top = obj.top + payload.top / ratio
+          obj.left = isReverse
+            ? calInvertPosition(size.width, obj.left + payload.left / ratio)
+            : obj.left + payload.left / ratio
         }
       }
     }

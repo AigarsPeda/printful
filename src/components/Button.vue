@@ -17,26 +17,30 @@ const selectedColor = computed(() => {
   if (props.color === 'green') {
     return {
       backgroundColor: '#059669',
-      color: '#fff'
+      color: '#fff',
+      hover: '#15803d'
     }
   }
   if (props.color === 'purple') {
     return {
       backgroundColor: '#7e22ce',
-      color: '#fff'
+      color: '#fff',
+      hover: '#7e22ce'
     }
   }
 
   if (props.color === 'red') {
     return {
-      backgroundColor: '#ef4444',
-      color: '#fff'
+      backgroundColor: '#dc2626',
+      color: '#fff',
+      hover: '#b91c1c'
     }
   }
 
   return {
     backgroundColor: '#e2e8f0',
-    color: '#0f172a'
+    color: '#0f172a',
+    hover: '#cbd5e1'
   }
 })
 </script>
@@ -54,6 +58,6 @@ const selectedColor = computed(() => {
 }
 
 .btn:hover {
-  background-color: #7e22ce;
+  background-color: v-bind('`${selectedColor.hover}`');
 }
 </style>

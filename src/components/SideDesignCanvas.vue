@@ -18,9 +18,8 @@ import checkBoundingBox from '@/utils/checkBoundingBox'
 import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
-import updateCanvasObjPositionAfterDrag from '@/utils/updateCanvasObjPositionAfterDrag'
+import updateCanvaObjectPosition from '@/utils/updateCanvaObjectPosition'
 import updateCanvasObjScale from '@/utils/updateCanvasObjScale'
-import updateMultipleCanvaObjectPositionAtOnce from '@/utils/updateMultipleCanvaObjectPositionAtOnce'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
 
@@ -67,7 +66,7 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
     isReverse: props.isReverse
   })
 
-  updateMultipleCanvaObjectPositionAtOnce(fabricCanvas, store)
+  updateCanvaObjectPosition(fabricCanvas, store)
   loadBgImageToCanvas(imgUrl(`${props.bgImage}`), fabricCanvas)
   loadSateToCanvas(fabricCanvas, props.rects, props.isContentEditable)
 
@@ -90,7 +89,6 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
       height: state.value.canvasDimensions.height / 2
     })
 
-    updateCanvasObjPositionAfterDrag(fabricCanvas, store)
     updateCanvasObjScale(fabricCanvas, store)
   }
 }
