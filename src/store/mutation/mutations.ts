@@ -34,21 +34,6 @@ const mutations: MutationTree<StateType> & MutationsType = {
       boundingBox: payload.boundingBox
     })
   },
-  [MutationEnum.UPDATE_RECT_SCALE](
-    state: StateType,
-    payload: { ids: string[]; scaleX: number; scaleY: number }
-  ) {
-    for (const savedCanvas of state.canvas) {
-      const id = savedCanvas.id as keyof StateType['canvasObject']
-
-      for (const obj of state.canvasObject[id]) {
-        if (payload.ids.includes(obj.id)) {
-          obj.width = obj.width * payload.scaleX
-          obj.height = obj.height * payload.scaleY
-        }
-      }
-    }
-  },
   [MutationEnum.UPDATE_RECT_POSITION](
     state: StateType,
     payload: { id: string; top: number; left: number }
@@ -69,10 +54,8 @@ const mutations: MutationTree<StateType> & MutationsType = {
   },
   [MutationEnum.UPDATE_MULTIPLE_RECT_POSITION](
     state: StateType,
-    payload: { ids: string[]; top: number; left: number }
+    payload: { ids: string[]; top: number; left: number; scaleX: number; scaleY: number }
   ) {
-    console.log('UPDATE_MULTIPLE_RECT_POSITION', payload)
-
     for (const savedCanvas of state.canvas) {
       const id = savedCanvas.id as keyof StateType['canvasObject']
 
@@ -86,6 +69,8 @@ const mutations: MutationTree<StateType> & MutationsType = {
           obj.left = isReverse
             ? calInvertPosition(size.width, obj.left + payload.left / ratio)
             : obj.left + payload.left / ratio
+          obj.width = obj.width * payload.scaleX
+          obj.height = obj.height * payload.scaleY
         }
       }
     }

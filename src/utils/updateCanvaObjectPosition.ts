@@ -12,6 +12,8 @@ const updateCanvaObjectPosition = (canvas: fabric.Canvas, store: StoreType) => {
   })
 
   canvas.on('object:modified', (selectedObj) => {
+    const scale = selectedObj.target?.getObjectScaling()
+
     const lastTop = selectedObj.target?.top || 0
     const lastLeft = selectedObj.target?.left || 0
 
@@ -22,9 +24,11 @@ const updateCanvaObjectPosition = (canvas: fabric.Canvas, store: StoreType) => {
     const movedLeft = lastLeft - originalLeft
 
     store.commit(MutationEnum.UPDATE_MULTIPLE_RECT_POSITION, {
-      ids: selectedObjIds,
       top: movedTop,
-      left: movedLeft
+      left: movedLeft,
+      ids: selectedObjIds,
+      scaleX: Math.round((scale?.scaleX || 1) * 100) / 100,
+      scaleY: Math.round((scale?.scaleY || 1) * 100) / 100
     })
   })
 }

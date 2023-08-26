@@ -19,7 +19,6 @@ import loadBgImageToCanvas from '@/utils/loadBgImageToCanvas'
 import loadSateToCanvas from '@/utils/loadSateToCanvas'
 import removeObjWithoutIdFromCanvas from '@/utils/removeObjWithoutIdFromCanvas'
 import updateCanvaObjectPosition from '@/utils/updateCanvaObjectPosition'
-import updateCanvasObjScale from '@/utils/updateCanvasObjScale'
 import { fabric } from 'fabric'
 import { computed, ref, watch } from 'vue'
 
@@ -88,8 +87,6 @@ const handleCreated = (fabricCanvas: fabric.Canvas) => {
       width: state.value.canvasDimensions.width / 2,
       height: state.value.canvasDimensions.height / 2
     })
-
-    updateCanvasObjScale(fabricCanvas, store)
   }
 }
 
