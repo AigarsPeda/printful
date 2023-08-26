@@ -3,11 +3,7 @@
     <div class="design-button-list-container">
       <ul>
         <li v-for="(item, index) in frontCanvasObject">
-          <DesignSettingCard
-            :key="index"
-            :item="item"
-            :position="{ left: item.left, top: item.top }"
-          />
+          <DesignSettingCard :itemId="item.id" :position="{ left: item.left, top: item.top }" />
         </li>
       </ul>
       <div class="design-option-button-container">
@@ -74,9 +70,10 @@ import DesignSettingCard from '@/components/DesignSettingCard.vue'
 import SideDesignCanvas from '@/components/SideDesignCanvas.vue'
 import { useStore } from '@/store/store'
 import handleAddObjToCanvas from '@/utils/handleAddObjToCanvas'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 const store = useStore()
+
 const frontCanvasObject = computed(() => store.getters.getFrontCanva)
 const canvasDimensions = computed(() => store.getters.getMainCanvasDimensions)
 const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)

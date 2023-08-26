@@ -42,13 +42,14 @@ const mutations: MutationTree<StateType> & MutationsType = {
       const id = key.id as keyof StateType['canvasObject']
       const isReverse = key.isReverse
       const size = getCanvasSize(state, id)
+      const ratio = calculateSizeRatio(state.mainCanvasDimensions, size)
 
       state.canvasObject[id] = updateCanvasObjectArray(
         state.canvasObject[id],
         payload,
         isReverse,
         size,
-        calculateSizeRatio(state.mainCanvasDimensions, size)
+        ratio
       )
     }
   },

@@ -11,6 +11,9 @@ const getters: GetterTree<StateType, StateType> & GettersType = {
   },
   getFrontCanva: (state) => {
     return state.canvasObject.front
+  },
+  getFrontCanvasIds: (state) => {
+    return state.canvasObject.front.map((item) => item.id)
   }
 }
 

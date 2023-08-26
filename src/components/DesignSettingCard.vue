@@ -6,13 +6,13 @@
         <label> Left: {{ position.left }} </label>
         <input
           type="range"
-          :value="position.left"
+          :value="item?.left || 0"
           :min="boundingBox?.left || 0"
-          :max="(boundingBox?.left || 0) + (boundingBox?.width || 0) - item.width"
+          :max="(boundingBox?.left || 0) + (boundingBox?.width || 0) - (item?.width || 0)"
           @input="
             handlePotionUpdate(
               {
-                id: item.id,
+                id: itemId,
                 top: position.top,
                 left: eventToNumber($event)
               },
@@ -25,13 +25,13 @@
         <label> Top: {{ position.top }} </label>
         <input
           type="range"
-          :value="position.top"
+          :value="item?.top || 0"
           :min="boundingBox?.top || 0"
-          :max="(boundingBox?.top || 0) + (boundingBox?.height || 0) - item.height"
+          :max="(boundingBox?.top || 0) + (boundingBox?.height || 0) - (item?.height || 0)"
           @input="
             handlePotionUpdate(
               {
-                id: item.id,
+                id: itemId,
                 left: position.left,
                 top: eventToNumber($event)
               },
@@ -42,27 +42,30 @@
       </div>
     </div>
   </div>
-  <ColorModal :closeModal="closeModal" :isOpened="isModalVisible" :selectedObjId="item.id" />
+  <ColorModal :closeModal="closeModal" :isOpened="isModalVisible" :selectedObjId="itemId" />
 </template>
 
 <script setup lang="ts">
 import ColorModal from '@/components/ColorModal.vue'
-import { type RectType } from '@/store/state'
 import { useStore } from '@/store/store'
 import eventToNumber from '@/utils/eventToNumber'
 import handlePotionUpdate from '@/utils/handlePotionUpdate'
 import { computed, ref } from 'vue'
 
-defineProps<{
-  item: RectType
+const props = defineProps<{
+  itemId: string
   position: { left: number; top: number }
 }>()
 
 const store = useStore()
-const isModalVisible = ref<boolean>(false)
+const isModalVisible = ref(false)
 const boundingBox = computed(
   () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
 )
+
+const item = computed(() => {
+  return store.state.canvasObject.front.find((i) => i.id === props.itemId)
+})
 
 const openModal = () => {
   isModalVisible.value === false ? (isModalVisible.value = true) : (isModalVisible.value = false)
@@ -71,8 +74,6 @@ const openModal = () => {
 const closeModal = () => {
   isModalVisible.value = false
 }
-
-console.log('boundingBox', boundingBox)
 </script>
 
 <style scoped>
@@ -89,7 +90,7 @@ console.log('boundingBox', boundingBox)
   color: '#111827';
   cursor: pointer;
   margin-right: 1rem;
-  background-color: v-bind('`${item.fill}`');
+  background-color: v-bind('`${item?.fill}`');
 }
 
 .design-setting-card {
