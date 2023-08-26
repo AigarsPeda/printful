@@ -1,6 +1,7 @@
 import { MutationEnum, type MutationsType } from '@/store/mutation/mutation.types'
 import addCanvasObjectArray from '@/store/mutation/utils/addCanvasObjectArray'
 import getCanvasSize from '@/store/mutation/utils/getCanvasSize'
+import updateCanvasObjectArray from '@/store/mutation/utils/updateCanvasObjectArray'
 import type { RectType, StateType } from '@/store/state'
 import calInvertPosition from '@/utils/calInvertPosition'
 import calculateSizeRatio from '@/utils/calculateSizeRatio'
@@ -50,8 +51,28 @@ const mutations: MutationTree<StateType> & MutationsType = {
   },
   [MutationEnum.UPDATE_RECT_POSITION](
     state: StateType,
+    payload: { id: string; top: number; left: number }
+  ) {
+    for (const key of state.canvas) {
+      const id = key.id as keyof StateType['canvasObject']
+      const isReverse = key.isReverse
+      const size = getCanvasSize(state, id)
+
+      state.canvasObject[id] = updateCanvasObjectArray(
+        state.canvasObject[id],
+        payload,
+        isReverse,
+        size,
+        calculateSizeRatio(state.mainCanvasDimensions, size)
+      )
+    }
+  },
+  [MutationEnum.UPDATE_MULTIPLE_RECT_POSITION](
+    state: StateType,
     payload: { ids: string[]; top: number; left: number }
   ) {
+    console.log('UPDATE_MULTIPLE_RECT_POSITION', payload)
+
     for (const savedCanvas of state.canvas) {
       const id = savedCanvas.id as keyof StateType['canvasObject']
 

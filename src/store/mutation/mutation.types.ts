@@ -7,7 +7,8 @@ export enum MutationEnum {
   SAVE_BOUNDING_BOX = 'SAVE_BOUNDING_BOX',
   UPDATE_RECT_SCALE = 'UPDATE_RECT_SCALE',
   UPDATE_RECK_COLOR = 'UPDATE_RECK_COLOR',
-  UPDATE_RECT_POSITION = 'UPDATE_RECT_POSITION'
+  UPDATE_RECT_POSITION = 'UPDATE_RECT_POSITION',
+  UPDATE_MULTIPLE_RECT_POSITION = 'UPDATE_MULTIPLE_RECT_POSITION'
 }
 
 //Mutation Types
@@ -33,6 +34,10 @@ export type MutationsType<S = StateType> = {
     payload: { ids: string[]; scaleX: number; scaleY: number }
   ): void
   [MutationEnum.UPDATE_RECT_POSITION](
+    state: S,
+    payload: { id: string; top: number; left: number }
+  ): void
+  [MutationEnum.UPDATE_MULTIPLE_RECT_POSITION](
     state: S,
     payload: { ids: string[]; top: number; left: number }
   ): void

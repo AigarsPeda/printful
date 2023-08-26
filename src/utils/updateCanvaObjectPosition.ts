@@ -21,7 +21,7 @@ const updateCanvaObjectPosition = (canvas: fabric.Canvas, store: StoreType) => {
     const movedTop = lastTop - originalTop
     const movedLeft = lastLeft - originalLeft
 
-    store.commit(MutationEnum.UPDATE_RECT_POSITION, {
+    store.commit(MutationEnum.UPDATE_MULTIPLE_RECT_POSITION, {
       ids: selectedObjIds,
       top: movedTop,
       left: movedLeft

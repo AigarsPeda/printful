@@ -74,7 +74,7 @@ import DesignSettingCard from '@/components/DesignSettingCard.vue'
 import SideDesignCanvas from '@/components/SideDesignCanvas.vue'
 import { useStore } from '@/store/store'
 import handleAddObjToCanvas from '@/utils/handleAddObjToCanvas'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const store = useStore()
 const frontCanvasObject = computed(() => store.getters.getFrontCanva)

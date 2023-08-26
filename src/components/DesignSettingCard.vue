@@ -46,19 +46,23 @@
 </template>
 
 <script setup lang="ts">
+import ColorModal from '@/components/ColorModal.vue'
 import { type RectType } from '@/store/state'
-import { store } from '@/store/store'
+import { useStore } from '@/store/store'
 import eventToNumber from '@/utils/eventToNumber'
 import handlePotionUpdate from '@/utils/handlePotionUpdate'
 import { computed, ref } from 'vue'
-import ColorModal from '@/components/ColorModal.vue'
 
 defineProps<{
   item: RectType
   position: { left: number; top: number }
 }>()
 
+const store = useStore()
 const isModalVisible = ref<boolean>(false)
+const boundingBox = computed(
+  () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
+)
 
 const openModal = () => {
   isModalVisible.value === false ? (isModalVisible.value = true) : (isModalVisible.value = false)
@@ -68,9 +72,7 @@ const closeModal = () => {
   isModalVisible.value = false
 }
 
-const boundingBox = computed(
-  () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
-)
+console.log('boundingBox', boundingBox)
 </script>
 
 <style scoped>
