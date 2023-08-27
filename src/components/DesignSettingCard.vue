@@ -1,7 +1,7 @@
 <template>
   <div class="design-setting-card-container">
-    <button class="design-setting-card_color" @click="openModal">Change color</button>
     <div>
+      <button class="design-setting-card_color_btn" @click="openModal">Change color</button>
       <div class="design-setting-card">
         <label> Left: {{ item.left }} </label>
         <input
@@ -87,23 +87,30 @@ const closeModal = () => {
 <style scoped>
 .design-setting-card-container {
   display: flex;
+  padding: 1rem;
   color: '#111827';
-  padding: 0.5rem 1rem;
   background-color: #d1d5db;
   transition: all 0.3s ease-in-out;
 }
 
-.design-setting-card_color {
+.design-setting-card_color_btn {
   border: none;
   color: '#111827';
   cursor: pointer;
-  margin-right: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
   background-color: v-bind('`${item?.fill}`');
+}
+
+.design-setting-card_color_btn:hover {
+  background-color: v-bind('`${item?.fill}99`');
 }
 
 .design-setting-card {
   display: flex;
-  margin-top: 0.5rem;
+  margin: 1rem 0;
   flex-direction: column;
 }
 
@@ -112,5 +119,34 @@ const closeModal = () => {
   color: '#111827';
   text-align: left;
   font-size: 0.8rem;
+}
+
+input[type='range'] {
+  outline: 0;
+  height: 5px;
+  width: 300px;
+  margin: 0 auto;
+  display: block;
+  appearance: none;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  background-color: #bdc3c7;
+}
+input[type='range']::-webkit-slider-thumb {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  border: 2px solid white;
+  transition: 0.3s ease-in-out;
+  background-color: v-bind('`${item?.fill}`');
+}
+​ input[type='range']::-webkit-slider-thumb:hover {
+  background-color: white;
+  border: 2px solid v-bind('`${item?.fill}`');
+}
+input[type='range']::-webkit-slider-thumb:active {
+  transform: scale(1.6);
 }
 </style>
