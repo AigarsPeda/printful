@@ -3,12 +3,12 @@
     <button class="design-setting-card_color" @click="openModal">Change color</button>
     <div>
       <div class="design-setting-card">
-        <label> Left: {{ item?.left || 0 }} </label>
+        <label> Left: {{ item.left }} </label>
         <input
           type="range"
-          :value="item?.left || 0"
-          :min="boundingBox?.left || 0"
-          :max="(boundingBox?.left || 0) + (boundingBox?.width || 0) - (item?.width || 0)"
+          :value="item.left"
+          :min="boundingBox?.left"
+          :max="(boundingBox?.left || 0) + (boundingBox?.width || 0) - item.width"
           @input="
             handlePotionUpdate(
               {
@@ -22,17 +22,17 @@
         />
       </div>
       <div class="design-setting-card">
-        <label> Top: {{ item?.top || 0 }} </label>
+        <label> Top: {{ item.top }} </label>
         <input
           type="range"
-          :value="item?.top || 0"
+          :value="item.top"
           :min="boundingBox?.top || 0"
-          :max="(boundingBox?.top || 0) + (boundingBox?.height || 0) - (item?.height || 0)"
+          :max="(boundingBox?.top || 0) + (boundingBox?.height || 0) - item?.height"
           @input="
             handlePotionUpdate(
               {
                 id: itemId,
-                left: item?.left || 0,
+                left: item.left,
                 top: eventToNumber($event)
               },
               store
@@ -63,7 +63,16 @@ const boundingBox = computed(
 )
 
 const item = computed(() => {
-  return store.state.canvasObject.front.find((i) => i.id === props.itemId)
+  return (
+    store.state.canvasObject.front.find((i) => i.id === props.itemId) || {
+      id: '',
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 0,
+      fill: ''
+    }
+  )
 })
 
 const openModal = () => {
