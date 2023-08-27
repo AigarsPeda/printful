@@ -3,16 +3,30 @@ import addCanvasObjectArray from '@/store/mutation/utils/addCanvasObjectArray'
 import getCanvasSize from '@/store/mutation/utils/getCanvasSize'
 import updateCanvasObjectArray from '@/store/mutation/utils/updateCanvasObjectArray'
 import type { RectType, StateType } from '@/store/state'
-import calInvertPosition from '@/utils/calInvertPosition'
 import calculateSizeRatio from '@/utils/calculateSizeRatio'
 import type { MutationTree } from 'vuex'
 
 const mutations: MutationTree<StateType> & MutationsType = {
   [MutationEnum.ADD_RECT](state: StateType, payload: RectType) {
-    addCanvasObjectArray(state.canvasObject.front, payload)
-    addCanvasObjectArray(state.canvasObject.back, payload, 2)
-    addCanvasObjectArray(state.canvasObject.sideL, payload, 4)
-    addCanvasObjectArray(state.canvasObject.sideR, payload, 4)
+    const mainCanva = state.mainCanvasDimensions
+
+    for (const savedCanvas of state.canvas) {
+      const id = savedCanvas.id as keyof StateType['canvasObject']
+      const isReverse = savedCanvas.isReverse
+      const size = getCanvasSize(state, id)
+      const ratio = calculateSizeRatio(state.mainCanvasDimensions, size)
+
+      const rect: RectType = {
+        id: payload.id,
+        top: payload.top,
+        fill: payload.fill,
+        width: payload.width,
+        height: payload.height,
+        left: isReverse ? mainCanva.width - payload.left : payload.left
+      }
+
+      addCanvasObjectArray(state.canvasObject[id], rect, ratio)
+    }
   },
 
   [MutationEnum.SAVE_CANVAS](
@@ -68,9 +82,9 @@ const mutations: MutationTree<StateType> & MutationsType = {
         const left = isReverse ? obj.left - payload.left / ratio : obj.left + payload.left / ratio
 
         if (payload.ids.includes(obj.id)) {
-          obj.top = obj.top + payload.top / ratio
           obj.left = left
           obj.width = obj.width * payload.scaleX
+          obj.top = obj.top + payload.top / ratio
           obj.height = obj.height * payload.scaleY
         }
       }

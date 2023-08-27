@@ -1,4 +1,5 @@
 import type { RectType } from '@/store/state'
+import calInvertPosition from '../../../utils/calInvertPosition'
 
 const addCanvasObjectArray = (array: RectType[], payload: RectType, divider?: number) => {
   array.push({
