@@ -1,11 +1,13 @@
 <template>
   <div class="design-container">
     <div class="design-button-list-container">
-      <ul>
-        <li v-for="(item, index) in frontCanvasObject">
-          <DesignSettingCard :key="index" :itemId="item.id" />
-        </li>
-      </ul>
+      <div>
+        <ul>
+          <li v-for="(item, index) in frontCanvasObject">
+            <DesignSettingCard :key="index" :itemId="item.id" />
+          </li>
+        </ul>
+      </div>
       <div class="design-option-button-container">
         <Button
           color="purple"
@@ -86,6 +88,8 @@ const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
 
 .design-button-list-container {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   cursor: pointer;
   border-radius: 5px;
   align-items: center;
@@ -98,6 +102,8 @@ const lengthCanvasObject = computed(() => store.getters.getLengthCanvasObject)
   margin: 0;
   padding: 0;
   list-style: none;
+  max-height: 40rem;
+  overflow-y: auto;
 }
 
 .design-button-list-container li {
