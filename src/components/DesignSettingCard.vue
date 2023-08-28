@@ -1,6 +1,6 @@
 <template>
   <div class="design-setting-card-container">
-    <div>
+    <div v-if="item">
       <button class="design-setting-card_color_btn" @click="openModal">Change color</button>
       <div class="design-setting-card">
         <label> Left: {{ item.left }} </label>
@@ -47,32 +47,26 @@
 
 <script setup lang="ts">
 import ColorModal from '@/components/ColorModal.vue'
+import type { RectType } from '@/store/state'
 import { useStore } from '@/store/store'
 import eventToNumber from '@/utils/eventToNumber'
 import handlePotionUpdate from '@/utils/handlePotionUpdate'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const props = defineProps<{
   itemId: string
 }>()
 
 const store = useStore()
+const item = ref<RectType>()
 const isModalVisible = ref(false)
+
 const boundingBox = computed(
   () => store.state.boundingBoxes.find((b) => b.id === 'front')?.boundingBox || null
 )
 
-const item = computed(() => {
-  return (
-    store.state.canvasObject.front.find((i) => i.id === props.itemId) || {
-      id: '',
-      top: 0,
-      left: 0,
-      width: 0,
-      height: 0,
-      fill: ''
-    }
-  )
+onMounted(() => {
+  item.value = store.state.canvasObject.front.find((i) => i.id === props.itemId)
 })
 
 const openModal = () => {
