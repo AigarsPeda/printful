@@ -89,14 +89,18 @@ const closeModal = () => {
   display: flex;
   padding: 1rem;
   color: '#111827';
-  background-color: #d1d5db;
+  border-radius: 10px;
+  margin: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  background-color: #f3f4f6;
   transition: all 0.3s ease-in-out;
+  box-shadow: #d1d5db 0px 2px 8px 0px;
 }
 
 .design-setting-card_color_btn {
   border: none;
-  color: '#111827';
   cursor: pointer;
+  color: '#111827';
   font-weight: 600;
   padding: 10px 20px;
   border-radius: 5px;
@@ -130,7 +134,7 @@ input[type='range'] {
   appearance: none;
   border-radius: 5px;
   -webkit-appearance: none;
-  background-color: #bdc3c7;
+  background-color: #d1d5db;
 }
 input[type='range']::-webkit-slider-thumb {
   width: 1rem;
